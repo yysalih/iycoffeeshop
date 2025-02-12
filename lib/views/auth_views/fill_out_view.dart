@@ -19,7 +19,12 @@ class FillOutView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     final language = ref.watch(languageStateProvider);
+    final theme = ref.watch(themeStateProvider);
+
     final authNotifier = ref.watch(authController.notifier);
     final authState = ref.watch(authController);
 
@@ -28,125 +33,163 @@ class FillOutView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: kBlack,
-      body: SafeArea(
-        child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+      body: Stack(
+        children: [
+          Image.asset(kBackgroundImage, width: width,
+            height: height, fit: BoxFit.cover,),
+          SafeArea(
+            child: Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 20.0, vertical: 60.h),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: theme ? Colors.white : kDarkBackground,
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.close, color: kWhite,),
-                  ),
-                  Text(languages[language]!["fill_out"]!, style: kTitleTextStyle.copyWith(
-                      color: kWhite
-                  ),),
-                  Container()
-                ],
-              ),
 
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 40.h,
-                    backgroundColor: kLightBlack,
-                    backgroundImage: profileState.image.isEmpty ? authNotifier.currentUser!.photoURL == null ? null
-                        : CachedNetworkImageProvider(authNotifier.currentUser!.photoURL!) :
-                    CachedNetworkImageProvider(profileState.image)
-                    ,
-                    child: profileState.image.isEmpty ? authNotifier.currentUser!.photoURL != null ? null
-                        : toEdit ? CachedNetworkImage(imageUrl: authState.currentUser.image!)
-                        : Image.asset("assets/icons/photo.png", width: 50.w,) : null,
-                  ),
-                  SizedBox(width: 10.w,),
-                  TextButton(
-                    child: Row(
+                    Row(
                       children: [
-                        const Icon(Icons.add, color: kWhite,),
+                        CircleAvatar(
+                          radius: 40.h,
+                          backgroundColor: kLightBlack,
+                          backgroundImage: profileState.image.isEmpty ? 
+                          authNotifier.currentUser!.photoURL == null ? null
+                              : CachedNetworkImageProvider(authNotifier.currentUser!.photoURL!) :
+                          CachedNetworkImageProvider(profileState.image)
+                          ,
+                          child: profileState.image.isEmpty ? authNotifier.currentUser!.photoURL != null ? null
+                              : toEdit ? CachedNetworkImage(imageUrl: authState.currentUser.image!)
+                              : Image.asset("assets/icons/photo.png", width: 50.w,) : null,
+                        ),
                         SizedBox(width: 10.w,),
-                        Text(languages[language]!["add_photo"]!, style: kCustomTextStyle,),
+                        TextButton(
+                          child: Row(
+                            children: [
+                              Icon(Icons.add, color: textColor(theme),),
+                              SizedBox(width: 10.w,),
+                              Text(languages[language]!["add_photo"]!, style: kCustomTextStyle.copyWith(
+                                color: textColor(theme)
+                              ),),
+                            ],
+                          ),
+                          onPressed: () {
+                            profileNotifier.showPicker(context, language: language);
+                          },
+                        ),
                       ],
                     ),
-                    onPressed: () {
-                      profileNotifier.showPicker(context, language: language);
-                    },
-                  ),
-                ],
+
+                    Column(
+                      children: [
+                        customInputField(theme: theme, title: languages[language]!["name"]!,
+                          hintText: languages[language]!["input_name"]!,
+                          icon: Icons.person, onTap: () {
+
+                          }, controller: authNotifier.nameController..text = toEdit ?
+                          authState.currentUser.name! :
+                            authNotifier.currentUser!.displayName == null ? ""
+                                : authNotifier.currentUser!.displayName ?? authNotifier.nameController.text,
+                         onChanged: (value) {
+
+                         },),
+                        SizedBox(height: 10.h,),
+                        customInputField(theme: theme, title: languages[language]!["surname"]!,
+                          hintText: languages[language]!["input_surname"]!,
+                          icon: Icons.person, onTap: () {
+
+                          }, controller: authNotifier.surnameController..text = toEdit
+                              ? authState.currentUser.lastname! :
+                               authNotifier.surnameController.text, onChanged: (value) {
+
+                            },),
+                        SizedBox(height: 10.h,),
+                        customInputField(theme: theme, title: languages[language]!["email"]!,
+                          hintText: languages[language]!["input_email"]!,
+                          icon: Icons.local_post_office, onTap: () {
+
+                          }, controller: authNotifier.emailController..text = toEdit ? authState.currentUser.email! :
+                            authNotifier.currentUser!.email ?? authNotifier.emailController.text, onChanged: (value) {
+
+                            },),
+                        SizedBox(height: 10.h,),
+                        customInputField(theme: theme, title: languages[language]!["phone"]!,
+                          hintText: languages[language]!["input_phone"]!,
+                          icon: Icons.phone, onTap: () {
+
+                          }, controller: authNotifier.phoneController..text = toEdit
+                              ? authState.currentUser.phone! : authNotifier.phoneController.text,
+                        onChanged: (value) {
+
+                        },),
+                      ],
+                    ),
+
+
+                    customButton(title: languages[language]![toEdit ? "save" : "continue"]!,
+                      color: buttonColor(theme), onPressed: () async {
+
+                      if(!toEdit && authNotifier.isAbleToContinue) {
+                        await authNotifier.createUser(context: context, errorTitle: languages[language]!["problem_signing_up"]!);
+
+                        Navigator.push(context, routeToView(const MainView()));
+                      }
+                      else if(!authNotifier.isAbleToContinue) {
+                        showWarningSnackbar(context: context, title: languages[language]!["missing_values"]!);
+                      }
+                      else {
+                        authNotifier.editUser(context: context,
+                            image: profileState.image.isNotEmpty ? profileState.image : authState.currentUser.image!,
+                            errorTitle: languages[language]!["error_editing_user"]!,
+                            succesTitle: languages[language]!["success_editing_user"]!);
+                      }
+                    },),
+                  ],
+                ),
               ),
-
-              Column(
-                children: [
-                  customInputField(title: languages[language]!["name"]!,
-                    hintText: languages[language]!["input_name"]!,
-                    icon: Icons.person, onTap: () {
-
-                    }, controller: authNotifier.nameController..text = toEdit ?
-                    authState.currentUser.name! :
-                      authNotifier.currentUser!.displayName == null ? ""
-                          : authNotifier.currentUser!.displayName ?? authNotifier.nameController.text,
-                   onChanged: (value) {
-
-                   },),
-                  SizedBox(height: 10.h,),
-                  customInputField(title: languages[language]!["surname"]!,
-                    hintText: languages[language]!["input_surname"]!,
-                    icon: Icons.person, onTap: () {
-
-                    }, controller: authNotifier.surnameController..text = toEdit
-                        ? authState.currentUser.lastname! :
-                         authNotifier.surnameController.text, onChanged: (value) {
-
-                      },),
-                  SizedBox(height: 10.h,),
-                  customInputField(title: languages[language]!["email"]!,
-                    hintText: languages[language]!["input_email"]!,
-                    icon: Icons.local_post_office, onTap: () {
-
-                    }, controller: authNotifier.emailController..text = toEdit ? authState.currentUser.email! :
-                      authNotifier.currentUser!.email ?? authNotifier.emailController.text, onChanged: (value) {
-
-                      },),
-                  SizedBox(height: 10.h,),
-                  customInputField(title: languages[language]!["phone"]!,
-                    hintText: languages[language]!["input_phone"]!,
-                    icon: Icons.phone, onTap: () {
-
-                    }, controller: authNotifier.phoneController..text = toEdit
-                        ? authState.currentUser.phone! : authNotifier.phoneController.text,
-                  onChanged: (value) {
-
-                  },),
-                ],
-              ),
-
-
-              customButton(title: languages[language]![toEdit ? "save" : "continue"]!, color: kGreen, onPressed: () async {
-
-                if(!toEdit && authNotifier.isAbleToContinue) {
-                  await authNotifier.createUser(context: context, errorTitle: languages[language]!["problem_signing_up"]!);
-
-                  Navigator.push(context, routeToView(const MainView()));
-                }
-                else if(!authNotifier.isAbleToContinue) {
-                  showWarningSnackbar(context: context, title: languages[language]!["missing_values"]!);
-                }
-                else {
-                  authNotifier.editUser(context: context,
-                      image: profileState.image.isNotEmpty ? profileState.image : authState.currentUser.image!,
-                      errorTitle: languages[language]!["error_editing_user"]!,
-                      succesTitle: languages[language]!["success_editing_user"]!);
-                }
-              },),
-            ],
+            ),
           ),
-        ),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child:
+              Padding(
+                padding: EdgeInsets.only(left: 20.0.w, top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ElevatedButton(
+                      onPressed: ()  {
+                        Navigator.pop(context);
+                        //TODO uncomment below
+                        //authNotifier.handleSignIn(authNotifier, context: context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(0),
+                        backgroundColor: buttonColor(theme), // <-- Button color
+                        foregroundColor: kWhite, // <-- Splash color
+                      ),
+                      child: Icon(Icons.close, color: cardColor(theme),),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(languages[language]!["fill_out"]!, style: kTitleTextStyle.copyWith(
+                          color: kWhite
+                      ),),
+                    ),
+                    Container()
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

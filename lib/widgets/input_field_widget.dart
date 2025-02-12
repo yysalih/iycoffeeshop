@@ -16,30 +16,31 @@ Widget customInputField({
   required TextEditingController controller,
   required Function() onTap,
   required Function(String value) onChanged,
+  required bool theme
   }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       if(hasTitle) ...[
-        Text(title, style: kTitleTextStyle.copyWith(color: kWhite),),
+        Text(title, style: kTitleTextStyle.copyWith(color: textColor(theme),),),
         SizedBox(height: 3.h,),
       ],
       ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
         child: Material(
-          color: kLightBlack,
+          color: cardColor(theme),
           child: TextField(
             controller: controller,
             enabled: isEnable,
-            style: kCustomTextStyle,
+            style: kCustomTextStyle.copyWith(color: textColor(theme)),
             onChanged: onChanged,
             onTap: onTap,
             decoration: kInputDecoration.copyWith(
               contentPadding: const EdgeInsets.all(10),
               hintText: hintText,
-              hintStyle: const TextStyle(color: kHintColor),
-              prefixIcon: hasPrefixIcon ? Icon(icon, color: kHintColor,) : null,
-              suffixIcon: hasSuffixIcon ? Icon(prefixIcon, color: kHintColor,) : null,
+              hintStyle: TextStyle(color: textColor(theme)),
+              prefixIcon: hasPrefixIcon ? Icon(icon, color: textColor(theme),) : null,
+              suffixIcon: hasSuffixIcon ? Icon(prefixIcon, color: textColor(theme),) : null,
             ),
           ),
         ),

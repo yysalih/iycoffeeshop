@@ -72,11 +72,9 @@ class _MyAppState extends ConsumerState<MyApp> {
             );
           },
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            fontFamily: "Poppins",
-            colorScheme: ColorScheme.fromSeed(seedColor: kBlueColor,),
-            useMaterial3: true,
-          ),
+          theme: kLightTheme, // Use the light theme
+          darkTheme: kDarkTheme, // Use the dark theme
+          themeMode: ThemeMode.system,
           home: child,
         );
       },
