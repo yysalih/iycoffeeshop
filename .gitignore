@@ -48,5 +48,5 @@ app.*.map.json
 /lib/constants/app_constants.dart
 #/lib/services/serverKey.dart.dart
 /lib/firebase_options.dart
-#notes.txt
+notes.txt
 #get.php
