@@ -5,6 +5,9 @@ const Map<String, Map<String, String>> languages = {
 };
 
 const Map<String, String> tr = {
+  "profile_view" : "Profil",
+  "shop_view" : "Mağaza",
+  "card_view" : "Sepet",
   "show" : "Görüntüle",
   "offer_accepted_load_title": "yükü için teklifiniz kabul edildi",
   "offer_accepted_truck_title": "aracı için teklifiniz kabul edildi",
@@ -266,6 +269,9 @@ const Map<String, String> tr = {
 
 };
 const Map<String, String> en = {
+  "profile_view" : "Profile",
+  "shop_view" : "Shop",
+  "card_view" : "Card",
   "missing_values" : "There are missing values!",
   "show" : "View",
   "new_offer_load_body": "A new offer has been received for your load",

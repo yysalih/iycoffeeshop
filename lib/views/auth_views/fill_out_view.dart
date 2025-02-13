@@ -56,13 +56,15 @@ class FillOutView extends ConsumerWidget {
                       children: [
                         CircleAvatar(
                           radius: 40.h,
-                          backgroundColor: kLightBlack,
-                          backgroundImage: profileState.image.isEmpty ? 
+                          backgroundColor: backGroundColor(theme),
+                          backgroundImage: profileState.image.isEmpty ? authNotifier.currentUser == null ? null :
                           authNotifier.currentUser!.photoURL == null ? null
                               : CachedNetworkImageProvider(authNotifier.currentUser!.photoURL!) :
                           CachedNetworkImageProvider(profileState.image)
                           ,
-                          child: profileState.image.isEmpty ? authNotifier.currentUser!.photoURL != null ? null
+                          child: profileState.image.isEmpty ? authNotifier.currentUser == null ?
+                          Image.asset("assets/icons/photo.png", width: 50.w,) :
+                          authNotifier.currentUser!.photoURL != null ? null
                               : toEdit ? CachedNetworkImage(imageUrl: authState.currentUser.image!)
                               : Image.asset("assets/icons/photo.png", width: 50.w,) : null,
                         ),
@@ -92,7 +94,8 @@ class FillOutView extends ConsumerWidget {
 
                           }, controller: authNotifier.nameController..text = toEdit ?
                           authState.currentUser.name! :
-                            authNotifier.currentUser!.displayName == null ? ""
+                          authNotifier.currentUser == null ? "" :
+                          authNotifier.currentUser!.displayName == null ? ""
                                 : authNotifier.currentUser!.displayName ?? authNotifier.nameController.text,
                          onChanged: (value) {
 
@@ -113,7 +116,8 @@ class FillOutView extends ConsumerWidget {
                           icon: Icons.local_post_office, onTap: () {
 
                           }, controller: authNotifier.emailController..text = toEdit ? authState.currentUser.email! :
-                            authNotifier.currentUser!.email ?? authNotifier.emailController.text, onChanged: (value) {
+                          authNotifier.currentUser == null ? authNotifier.emailController.text :
+                          authNotifier.currentUser!.email ?? authNotifier.emailController.text, onChanged: (value) {
 
                             },),
                         SizedBox(height: 10.h,),
@@ -132,11 +136,11 @@ class FillOutView extends ConsumerWidget {
 
                     customButton(title: languages[language]![toEdit ? "save" : "continue"]!,
                       color: buttonColor(theme), onPressed: () async {
-
-                      if(!toEdit && authNotifier.isAbleToContinue) {
-                        await authNotifier.createUser(context: context, errorTitle: languages[language]!["problem_signing_up"]!);
-
                         Navigator.push(context, routeToView(const MainView()));
+                      if(!toEdit && authNotifier.isAbleToContinue) {
+                        //TODO await authNotifier.createUser(context: context, errorTitle: languages[language]!["problem_signing_up"]!);
+
+
                       }
                       else if(!authNotifier.isAbleToContinue) {
                         showWarningSnackbar(context: context, title: languages[language]!["missing_values"]!);
