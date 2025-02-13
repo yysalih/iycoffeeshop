@@ -5,6 +5,16 @@ const Map<String, Map<String, String>> languages = {
 };
 
 const Map<String, String> tr = {
+  "all_products" : "Tüm Ürünler",
+  "most_popular" : "En Popüler Kahveler",
+  "latte" : "Latte" ,
+  "americano" : "Americano" ,
+  "mocha" : "Mocha",
+  "espresso" : "Espresso",
+  "coffee" : "Kahve",
+  "tea" : "Çay",
+  "food" : "Yiyecek",
+  "the_best_int_town" : "Şehrinin En iyisi",
   "profile_view" : "Profil",
   "shop_view" : "Mağaza",
   "card_view" : "Sepet",
@@ -269,6 +279,17 @@ const Map<String, String> tr = {
 
 };
 const Map<String, String> en = {
+  "most_popular" : "Most Popular",
+  "all_products" : "All Products",
+
+  "latte" : "Latte" ,
+  "americano" : "Americano" ,
+  "mocha" : "Mocha",
+  "espresso" : "Espresso",
+  "the_best_int_town" : "The best in town",
+  "coffee" : "Coffee",
+  "tea" : "Tea",
+  "food" : "Food",
   "profile_view" : "Profile",
   "shop_view" : "Shop",
   "card_view" : "Card",

@@ -12,6 +12,7 @@ class MainView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
+
     final theme = ref.watch(themeStateProvider);
 
     final mainState = ref.watch(mainController);
@@ -19,7 +20,7 @@ class MainView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: backGroundColor(theme),
-      body: mainNotifier.pages[mainState.bottomIndex],
+      body: SafeArea(child: mainNotifier.pages[mainState.bottomIndex]),
       bottomNavigationBar: const AppBottomBarWidget(),
     );
   }
