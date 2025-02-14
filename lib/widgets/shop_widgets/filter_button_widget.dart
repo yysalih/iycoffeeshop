@@ -32,7 +32,7 @@ class FilterButtonWidget extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(languages[language]![text]!, style: kCustomTextStyle.copyWith(
-                color: cardColor(theme), fontSize: 17
+                color: cardColor(theme),
             ),),
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iycoffee/constants/app_constants.dart';
 import 'package:iycoffee/constants/languages.dart';
+import 'package:iycoffee/views/shop_views/product_inner_view.dart';
 import 'package:iycoffee/widgets/shop_widgets/product_card_widget.dart';
 
 import '../../constants/providers.dart';
@@ -14,6 +15,7 @@ class ShopView extends ConsumerWidget {
   final List products = ["coffee", "tea", "food"];
   final List coffees = ["latte", "americano", "mocha", "espresso"];
   final List prices = ["30.0", "25.0", "45.0", "20.0"];
+  final List ratings = ["4.7", "4.3", "5.0", "3.5"];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,6 +24,13 @@ class ShopView extends ConsumerWidget {
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
+    final List descriptions = [
+      languages[language]!["latte_description"]!,
+       languages[language]!["americano_description"]!,
+      languages[language]!["mocha_description"]!,
+      languages[language]!["espresso_description"]!,
+    ];
 
     return SingleChildScrollView(  // Wrap everything in SingleChildScrollView
       child: Column(
@@ -56,10 +65,10 @@ class ShopView extends ConsumerWidget {
                   ),
                   SizedBox(height: 30.h),
                   Text(
-                    languages[language]!["the_best_int_town"]!,
+                    languages[language]!["welcome"]!,
                     style: kTitleTextStyle.copyWith(
                       color: backGroundColor(theme),
-                      fontSize: 40,
+                      fontSize: 25,
                     ),
                   ),
                   SizedBox(height: 30.h),
@@ -67,7 +76,9 @@ class ShopView extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       for (int i = 0; i < products.length; i++)
-                        FilterButtonWidget(text: products[i], onPressed: () {}),
+                        FilterButtonWidget(text: products[i], onPressed: () {
+
+                        }),
                     ],
                   ),
                 ],
@@ -81,7 +92,6 @@ class ShopView extends ConsumerWidget {
               languages[language]!["most_popular"]!,
               style: kTitleTextStyle.copyWith(
                 color: textColor(theme),
-                fontSize: 25,
               ),
             ),
           ),
@@ -96,8 +106,15 @@ class ShopView extends ConsumerWidget {
               itemCount: coffees.length,
               clipBehavior: Clip.none,
               itemBuilder: (context, index) => ProductCardWidget(
+                onPressed: () {
+                  Navigator.push(context, routeToView(ProductInnerView(
+                      description: descriptions[index], coffee: coffees[index],
+                      rating: ratings[index], prices: prices[index]
+                  )),);
+                },
                 name: languages[language]![coffees[index]]!,
                 price: "${prices[index]} TRY",
+
               ),
             ),
           ),
@@ -123,6 +140,12 @@ class ShopView extends ConsumerWidget {
               itemBuilder: (context, index) => ProductCardWidget(
                 name: languages[language]![coffees.reversed.toList()[index]]!,
                 price: "${prices[index]} TRY",
+                onPressed: () {
+                  Navigator.push(context, routeToView(ProductInnerView(
+                      description: descriptions[index], coffee: coffees[index],
+                      rating: ratings[index], prices: prices[index]
+                  )),);
+                },
               ),
             ),
           ),

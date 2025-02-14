@@ -5,6 +5,12 @@ const Map<String, Map<String, String>> languages = {
 };
 
 const Map<String, String> tr = {
+  "order" : "Sipariş Ver",
+  "latte_description" : "Latte, espresso ve buharda pişirilmiş süt ile hazırlanan bir kahve içeceğidir. Genellikle az miktarda köpükle süslenir.",
+  "americano_description" : "Amerikano, espresso'nun sıcak suyla seyreltilmesiyle hazırlanan bir kahve içeceğidir ve damla kahveye benzer bir güce sahiptir ancak farklı bir lezzet profiline sahiptir.",
+  "mocha_description" : "Mocha, çikolata aromalı bir latté'dir. Genellikle espresso, buharda pişirilmiş süt, çikolata şurubu ve krem şanti ile yapılır.",
+  "espresso_description" : "Espresso, ince öğütülmüş kahveden yüksek basınç altında sıcak su geçirilerek demlenen konsantre bir kahve türüdür.",
+  "welcome" : "Hoşgeldin",
   "all_products" : "Tüm Ürünler",
   "most_popular" : "En Popüler Kahveler",
   "latte" : "Latte" ,
@@ -279,6 +285,13 @@ const Map<String, String> tr = {
 
 };
 const Map<String, String> en = {
+  "order" : "Order Now",
+  "latte_description" : "A latte is a coffee beverage made with espresso and steamed milk. It is often topped with a small amount of foam.",
+  "americano_description" : "An americano is a coffee beverage made by diluting espresso with hot water, giving it a similar strength to drip coffee but with a different flavor profile.",
+  "mocha_description" : "A mocha is a chocolate-flavored latte. It is typically made with espresso, steamed milk, chocolate syrup, and whipped cream.",
+  "espresso_description" : "Espresso is a concentrated form of coffee that is brewed by forcing hot water under high pressure through finely-ground coffee.",
+
+  "welcome" : "Welcome",
   "most_popular" : "Most Popular",
   "all_products" : "All Products",
 

@@ -5,11 +5,17 @@ import 'package:iycoffee/constants/app_constants.dart';
 import 'package:iycoffee/constants/languages.dart';
 
 import '../../constants/providers.dart';
+import '../cup_widget.dart';
+import '../favorite_button_widget.dart';
 
 class ProductCardWidget extends ConsumerWidget {
   final String name;
   final String price;
-  const ProductCardWidget({super.key, required this.name, required this.price});
+  final Function() onPressed;
+  const ProductCardWidget({super.key, required this.name,
+    required this.price,
+    required this.onPressed,
+  });
 
 
   @override
@@ -34,9 +40,7 @@ class ProductCardWidget extends ConsumerWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: MaterialButton(
-                onPressed: () {
-
-                },
+                onPressed: onPressed,
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                   child: Column(
@@ -61,26 +65,16 @@ class ProductCardWidget extends ConsumerWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(name, style: kCustomTextStyle.copyWith(
-                                  color: Colors.white,fontSize: 20, fontWeight: FontWeight.bold
+                              Text(name, style: kTitleTextStyle.copyWith(
+                                  color: Colors.white,
                               ),),
                               SizedBox(height: 2.h,),
                               Text(price, style: kCustomTextStyle.copyWith(
-                                color: Colors.black, fontSize: 17,
+                                color: Colors.black, fontSize: 15,
                               ),),
                             ],
                           ),
-                          ElevatedButton(
-                            child: Icon(Icons.favorite, color: Colors.redAccent, size: 25,),
-                            onPressed: () {
-
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                padding: EdgeInsets.all(10),
-                                shape: CircleBorder()
-                            ),
-                          ),
+                          FavoriteButtonWidget(),
                         ],
                       ),
                     ],
@@ -90,21 +84,7 @@ class ProductCardWidget extends ConsumerWidget {
             )
 
           ),
-          Positioned(
-            bottom: 60.h,
-            left: 70.w,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-
-                Image.asset("assets/images/cup.png", width: 200.w,),
-                Positioned(
-                  top: 115.h, left: 65.w,
-                  child: Image.asset("assets/images/logo.png", width: 65.w, color: Colors.white,),
-                ),
-              ],
-            ),
-          ),
+          const CupWidget(),
 
         ],
       ),
