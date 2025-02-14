@@ -6,6 +6,7 @@ import 'package:iycoffee/constants/languages.dart';
 import 'package:iycoffee/widgets/shop_widgets/product_card_widget.dart';
 
 import '../../constants/providers.dart';
+import '../../widgets/shop_widgets/filter_button_widget.dart';
 
 class ShopView extends ConsumerWidget {
   ShopView({super.key});
@@ -66,7 +67,7 @@ class ShopView extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       for (int i = 0; i < products.length; i++)
-                        filterButtons(language, theme, products[i], () {}),
+                        FilterButtonWidget(text: products[i], onPressed: () {}),
                     ],
                   ),
                 ],
@@ -130,24 +131,4 @@ class ShopView extends ConsumerWidget {
     );
   }
 
-  Widget filterButtons(String language, bool theme, String text, Function() onPressed) => Container(
-    height: 40.h,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20),
-      color: buttonColor(theme)
-    ),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: MaterialButton(
-
-        onPressed: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(languages[language]![text]!, style: kCustomTextStyle.copyWith(
-            color: cardColor(theme), fontSize: 17
-          ),),
-        ),
-      ),
-    ),
-  );
 }

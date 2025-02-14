@@ -9,7 +9,7 @@ import '../../constants/providers.dart';
 class ProductCardWidget extends ConsumerWidget {
   final String name;
   final String price;
-  ProductCardWidget({super.key, required this.name, required this.price});
+  const ProductCardWidget({super.key, required this.name, required this.price});
 
 
   @override
