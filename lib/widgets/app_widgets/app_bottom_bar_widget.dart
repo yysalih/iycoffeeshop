@@ -40,7 +40,7 @@ class AppBottomBarWidget extends ConsumerWidget {
         backgroundColor: backGroundColor(theme),
         currentIndex: mainState.bottomIndex,
         onTap: mainNotifier.changePage,
-        selectedItemColor: kBlueColor,
+        selectedItemColor: textColor(!theme),
         unselectedItemColor: textColor(theme),
         showSelectedLabels: true,
         showUnselectedLabels: true,

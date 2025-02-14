@@ -65,10 +65,10 @@ class ShopView extends ConsumerWidget {
                   ),
                   SizedBox(height: 30.h),
                   Text(
-                    languages[language]!["welcome"]!,
+                    "${languages[language]!["welcome"]!} Rasim Ozan",
                     style: kTitleTextStyle.copyWith(
                       color: backGroundColor(theme),
-                      fontSize: 25,
+                      fontSize: 22,
                     ),
                   ),
                   SizedBox(height: 30.h),

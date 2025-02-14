@@ -8,6 +8,7 @@ import 'package:iycoffee/widgets/favorite_button_widget.dart';
 
 import '../../constants/app_constants.dart';
 import '../../constants/providers.dart';
+import '../../widgets/app_widgets/customizable_button_widget.dart';
 
 class ProductInnerView extends ConsumerWidget {
   final String coffee;
@@ -73,7 +74,9 @@ class ProductInnerView extends ConsumerWidget {
                             Text(languages[language]![coffee]!, style: kTitleTextStyle.copyWith(
                               color: textColor(theme), fontSize: 20
                             ),),
-                            const FavoriteButtonWidget()
+                            CustomizableElevatedButton(onPressed: () {
+
+                            },)
                           ],
                         ),
 
@@ -116,6 +119,7 @@ class ProductInnerView extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           CustomizableButton(
+                            width: width * .35, height: 45.h,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -133,6 +137,7 @@ class ProductInnerView extends ConsumerWidget {
                             },
                           ),
                           CustomizableButton(
+                            width: width * .35, height: 45.h,
                             child: Text(languages[language]!["order"]!, style: kCustomTextStyle,),
                             onPressed: () {
 
@@ -152,36 +157,4 @@ class ProductInnerView extends ConsumerWidget {
   }
 }
 
-class CustomizableButton extends StatelessWidget {
-  final Widget child;
-  final Color color;
-  final double borderRadius;
-  final Function() onPressed;
-  const CustomizableButton({super.key,
-    required this.child,
-    required this.onPressed,
-    this.color = kDarkSecondary,
-    this.borderRadius = 5
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-
-    return Container(
-      width: width * .35, height: 45.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius),
-        color: color,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: MaterialButton(
-          onPressed: onPressed,
-          child: child,
-        ),
-      ),
-    );
-  }
-}

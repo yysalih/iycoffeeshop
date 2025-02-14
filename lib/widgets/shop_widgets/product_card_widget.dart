@@ -42,7 +42,7 @@ class ProductCardWidget extends ConsumerWidget {
               child: MaterialButton(
                 onPressed: onPressed,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,11 +70,13 @@ class ProductCardWidget extends ConsumerWidget {
                               ),),
                               SizedBox(height: 2.h,),
                               Text(price, style: kCustomTextStyle.copyWith(
-                                color: Colors.black, fontSize: 15,
+                                color: Colors.grey.shade300, fontSize: 15,
                               ),),
                             ],
                           ),
-                          FavoriteButtonWidget(),
+                          CustomizableElevatedButton(onPressed: () {
+
+                          },),
                         ],
                       ),
                     ],

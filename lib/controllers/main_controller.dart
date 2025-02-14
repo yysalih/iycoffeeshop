@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iycoffee/constants/languages.dart';
+import 'package:iycoffee/views/card_views/card_view.dart';
+import 'package:iycoffee/views/profile_views/profile_view.dart';
 import 'package:iycoffee/views/shop_views/shop_view.dart';
 import '../models/user_model.dart';
 
@@ -48,7 +50,7 @@ class MainController extends StateNotifier<MainState> {
   final searchController = TextEditingController();
 
   final List<Widget> pages = [
-    ShopView(), Container(), Container()
+    ShopView(), CardView(), ProfileView()
   ];
 
   List<Map<String, dynamic>> pageInfo(String language) => [
