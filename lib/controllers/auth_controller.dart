@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -79,32 +81,38 @@ class AuthController extends StateNotifier<AuthState> {
 
   User? get currentUser => FirebaseAuth.instance.currentUser;
 
+
   switchRegister() {
     state = state.copyWith(isRegister: !state.isRegister);
   }
 
+  getCurrentUser() async {
+    await firebaseFirestore.collection("users").doc(currentUserUid).get().then((value) => state = state.copyWith(
+      currentUser: UserModel().fromJson(value.data()!)
+    ),);
+  }
 
-  Future<bool> checkIfUserExists() async {
-    final response = await http.post(
-      appUrl,
-      body: {
-        'singleQuery': "SELECT * FROM users WHERE uid = '${currentUser!.uid}'",
-      },
-    );
+  Future<bool> checkIfUserExists(User? _user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      debugPrint(data.runtimeType.toString());
-
-      if (data.toString().contains("error")) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      debugPrint('Error: ${response.statusCode}');
-      debugPrint('Error: ${response.reasonPhrase}');
+    if(_user == null) {
       return false;
+    }
+    else {
+      try {
+        final snapshot = await firebaseFirestore.collection('users').doc(_user.uid).get();
+        if(snapshot.exists) {
+          prefs.setString("uid", _user.uid);
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      catch(E) {
+        debugPrint(E.toString());
+        return false;
+      }
     }
   }
 
@@ -123,51 +131,19 @@ class AuthController extends StateNotifier<AuthState> {
         token: token,
     );
 
-    final response = await http.post(
-      appUrl,
-      body: {
-        'executeQuery':
-        "INSERT INTO users (${userModel.getDbFields()}) VALUES (${userModel.questionMarks})",
-        "params": jsonEncode(userModel.getDbFormat()),
-      },
-    );
-    if (response.statusCode == 200) {
-      debugPrint(response.body);
-      var data = jsonDecode(response.body);
-      debugPrint('Response: $data');
-      Navigator.push(context, routeToView(const MainView()));
-    } else {
-      debugPrint('Error: ${response.statusCode}');
-      debugPrint('Error: ${response.reasonPhrase}');
+    await FirebaseFirestore.instance.collection("users").doc(userModel.uid)
+        .set(userModel.toJson())
+        .whenComplete(() {
+          debugPrint("user created");
+          Navigator.push(context, routeToView(const MainView()));
+        })
+        .onError((error, stackTrace) {
+      debugPrint("Error in create method: $error");
+      debugPrint('Error: $stackTrace');
+
       showSnackbar(title: errorTitle, context: context);
-    }
-  }
+    });
 
-  getCurrentUser() async {
-    final response = await http.post(
-      appUrl,
-      body: {
-        'singleQuery':
-        "SELECT * FROM users WHERE uid = '${FirebaseAuth.instance.currentUser!.uid}'",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      UserModel userModel = UserModel().fromJson(data);
-      debugPrint('UserModel: ${userModel.toJson().toString()}');
-
-      if (data.toString().contains("error")) {
-        return false;
-      } else {
-        state = state.copyWith(currentUser: userModel);
-        return true;
-      }
-    } else {
-      debugPrint('Error: ${response.statusCode}');
-      debugPrint('Error: ${response.reasonPhrase}');
-      return false;
-    }
   }
 
   editUser(
@@ -186,43 +162,20 @@ class AuthController extends StateNotifier<AuthState> {
         token: state.currentUser.token,
     );
 
-    final response = await http.post(
-      appUrl,
-      body: {
-        'executeQuery': """
-        UPDATE users 
-        SET 
-          name = ?,
-          email = ?,
-          phone = ?
-        WHERE 
-          uid = '${currentUser!.uid}'
-      """,
-        "params": jsonEncode([
-          userModel.name,
-          userModel.email,
-          userModel.phone
-        ]),
-      },
-    );
-
-    if (response.statusCode == 200) {
-      debugPrint(response.body);
-      var data = jsonDecode(response.body);
-      debugPrint('Response: $data');
-
-      if (!data.toString().contains("error")) {
-        state = state.copyWith(currentUser: userModel);
-        Navigator.push(context, routeToView(const MainView()));
-        showSnackbar(title: succesTitle, context: context);
-      } else {
-        showSnackbar(title: errorTitle, context: context);
-      }
-    } else {
-      debugPrint('Error: ${response.statusCode}');
-      debugPrint('Error: ${response.reasonPhrase}');
+    await firebaseFirestore.collection("users").doc(currentUserUid).update({
+      "name": nameController.text,
+      "email": emailController.text,
+      "phone": phoneController.text,
+    }).whenComplete(() {
+      state = state.copyWith(currentUser: userModel);
+      Navigator.push(context, routeToView(const MainView()));
+      showSnackbar(title: succesTitle, context: context);
+    }).onError((error, stackTrace) {
+      debugPrint('Error: $error');
+      debugPrint('Error: $stackTrace');
       showSnackbar(title: errorTitle, context: context);
-    }
+    });
+
   }
 
   handleSignIn(AuthController authNotifier,
@@ -233,7 +186,7 @@ class AuthController extends StateNotifier<AuthState> {
     if (user != null) {
       prefs.setString("uid", user.uid);
 
-      bool isUserExists = await authNotifier.checkIfUserExists();
+      bool isUserExists = await authNotifier.checkIfUserExists(user);
 
       if (isUserExists) {
         Navigator.push(context, routeToView(const MainView()));
@@ -253,7 +206,7 @@ class AuthController extends StateNotifier<AuthState> {
       final user = userCredential.user!;
       prefs.setString("uid", user.uid);
 
-      bool isUserExists = await authNotifier.checkIfUserExists();
+      bool isUserExists = await authNotifier.checkIfUserExists(user);
 
       if (isUserExists) {
         Navigator.push(context, routeToView(const MainView()));
@@ -278,7 +231,7 @@ class AuthController extends StateNotifier<AuthState> {
     if (user != null) {
       prefs.setString("uid", user.uid);
 
-      bool isUserExists = await authNotifier.checkIfUserExists();
+      bool isUserExists = await authNotifier.checkIfUserExists(user);
 
       if (isUserExists) {
         Navigator.push(context, routeToView(const MainView()));
@@ -298,7 +251,7 @@ class AuthController extends StateNotifier<AuthState> {
       final user = userCredential.user!;
       prefs.setString("uid", user.uid);
 
-      bool isUserExists = await authNotifier.checkIfUserExists();
+      bool isUserExists = await authNotifier.checkIfUserExists(user);
 
       if (isUserExists) {
         Navigator.push(context, routeToView(const MainView()));

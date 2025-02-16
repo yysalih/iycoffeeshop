@@ -68,46 +68,7 @@ class ProfileController extends StateNotifier<ProfileState> {
   }
 
   deleteUser(String uid) async {
-    String query = 'DELETE FROM users WHERE uid = "$uid"';
-    final response = await http.post(appUrl, body: {"executeQuery": query});
-
-    String query1 = 'DELETE FROM loads WHERE ownerUid = "$uid"';
-    final response1 = await http.post(appUrl, body: {"executeQuery": query1});
-
-    String query2 = 'DELETE FROM trailers WHERE ownerUid = "$uid"';
-    final response2 = await http.post(appUrl, body: {"executeQuery": query2});
-
-    String query3 = 'DELETE FROM truck_posts WHERE ownerUid = "$uid"';
-    final response3 = await http.post(appUrl, body: {"executeQuery": query3});
-
-    String query4 = 'DELETE FROM trucks WHERE ownerUid = "$uid"';
-    final response4 = await http.post(appUrl, body: {"executeQuery": query4});
-
-    if(response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      debugPrint('Response: User Deleted: $data');
-    }
-
-    if(response1.statusCode == 200) {
-      var data = jsonDecode(response1.body);
-
-      debugPrint('Response: User Loads Deleted: $data');
-    }
-
-    if(response2.statusCode == 200) {
-      var data = jsonDecode(response2.body);
-      debugPrint('Response: User Trailers Deleted: $data');
-    }
-
-    if(response3.statusCode == 200) {
-      var data = jsonDecode(response3.body);
-      debugPrint('Response: User Truck Posts Deleted: $data');
-    }
-
-    if(response4.statusCode == 200) {
-      var data = jsonDecode(response4.body);
-      debugPrint('Response: User Trucks Deleted: $data');
-    }
+    await firebaseFirestore.collection("users").doc(currentUserUid).delete();
   }
 
 
@@ -197,26 +158,15 @@ class ProfileController extends StateNotifier<ProfileState> {
   updateToken(String currentUserUid, {required String token}) async {
 
 
-    final response = await http.post(
-      appUrl,
-      body: {
-        'executeQuery': "UPDATE users SET token = '$token' WHERE uid = '$currentUserUid'",
-      },
-    );
+    await firebaseFirestore.collection("users").doc(currentUserUid).update({
+      "token": token
 
-    if (response.statusCode == 200) {
-      var data = response.body;
-      if (data.toString().contains("error")) {
-        debugPrint('Error: ${response.statusCode}');
-        debugPrint('Error: ${response.reasonPhrase}');
-      } else {
-        debugPrint('Contact deleted successfully');
-        debugPrint('Updated Contacts: $token');
-      }
-    } else {
-      debugPrint('Error: ${response.statusCode}');
-      debugPrint('Error: ${response.reasonPhrase}');
-    }
+    }).whenComplete(() {
+      debugPrint('Token updated! : $token');
+    }).onError((error, stackTrace) {
+      debugPrint('Error: $error');
+      debugPrint('Error: $stackTrace');
+    });
   }
 
 }

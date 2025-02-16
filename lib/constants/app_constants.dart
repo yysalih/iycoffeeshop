@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -81,6 +82,8 @@ const InputDecoration kInputDecorationWithNoBorder = InputDecoration(
 
 bool isUserAnonymous() => FirebaseAuth.instance.currentUser!.isAnonymous;
 String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+
+FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
 Uri appUrl = Uri.parse('https://salihbalkis.com/get.php');
 //Uri appUrl = Uri.parse('http://coral-lemur-335530.hostingersite.com/get.php');

@@ -102,7 +102,7 @@ class Authentication {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     User? user = FirebaseAuth.instance.currentUser;
 
-    bool userExists = await authNotifier.checkIfUserExists();
+    bool userExists = await authNotifier.checkIfUserExists(user);
 
     try {
       if(prefs.getString("uid") != null && userExists) {

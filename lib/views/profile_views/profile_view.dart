@@ -50,11 +50,11 @@ class ProfileView extends ConsumerWidget {
               ),
             ),
             SizedBox(height: 10.h,),
-            Text("Rasim Ozan", style: kTitleTextStyle.copyWith(color: textColor(theme)),),
+            Text("Alican Kaya", style: kTitleTextStyle.copyWith(color: textColor(theme)),),
             SizedBox(height: 10.h,),
             Text("+90 553 098 11 78", style: kCustomTextStyle.copyWith(color: textColor(theme),),),
             SizedBox(height: 10.h,),
-            Text("rasimozan@gmail.com", style: kCustomTextStyle.copyWith(color: textColor(theme),),),
+            Text("alicankaya@gmail.com", style: kCustomTextStyle.copyWith(color: textColor(theme),),),
           ],
         ),
         Container(
