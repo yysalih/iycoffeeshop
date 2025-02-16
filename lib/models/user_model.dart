@@ -45,28 +45,4 @@ class UserModel implements BaseModel<UserModel> {
     "password": password,
     "phone": phone,
   };
-
-  String getDbFields() {
-    return "token, image, lastname, uid, name, email, password, phone, isBroker, isCarrier, src, registration, psiko, licenseFront, licenseBack, idFront, idBack, contacts, lat, lng";
-  }
-
-  String getDbFieldsWithQuestionMark() {
-    return "token = ?, image = ?, lastname = ?, uid = ?, name = ?, email = ?, password = ?, phone = ?,";
-  }
-
-  String get questionMarks => "?, ?, ?, ?, ?, ?, ?, ?";
-
-  List getDbFormat() {
-    return [
-      token,
-      image,
-      lastname,
-      uid,
-      name,
-      email,
-      password,
-      phone,
-    ];
-  }
-
 }
