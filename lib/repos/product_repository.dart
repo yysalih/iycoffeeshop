@@ -19,7 +19,7 @@ class ProductRepository {
   }
 
   Stream<List<ProductModel>> getProducts() {
-    return firebaseFirestore.collection("products").orderBy(_uid, descending: true).snapshots().map((snapshot) {
+    return firebaseFirestore.collection("products").snapshots().map((snapshot) {
       return snapshot.docs.map((e) => ProductModel().fromJson(e.data())).toList();
     });
   }

@@ -129,6 +129,7 @@ class AuthController extends StateNotifier<AuthState> {
         phone: phoneController.text,
         lastname: surnameController.text,
         token: token,
+      favorites: []
     );
 
     await FirebaseFirestore.instance.collection("users").doc(userModel.uid)
@@ -248,16 +249,7 @@ class AuthController extends StateNotifier<AuthState> {
     UserCredential? userCredential = await Authentication.signInAnonymously();
 
     if (userCredential.user != null) {
-      final user = userCredential.user!;
-      prefs.setString("uid", user.uid);
-
-      bool isUserExists = await authNotifier.checkIfUserExists(user);
-
-      if (isUserExists) {
-        Navigator.push(context, routeToView(const MainView()));
-      } else {
-        Navigator.push(context, routeToView(const MainView()));
-      }
+      Navigator.push(context, routeToView(const MainView()));
     }
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iycoffee/controllers/order_controller.dart';
+import 'package:iycoffee/widgets/app_widgets/warning_info_widget.dart';
 
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
@@ -13,10 +15,6 @@ import '../../widgets/shop_widgets/product_basket_widget.dart';
 class CardView extends ConsumerWidget {
   CardView({super.key});
 
-  final List products = ["coffee", "tea", "food"];
-  final List coffees = ["latte", "americano", "mocha", "espresso"];
-  final List prices = ["30.0", "25.0", "45.0", "20.0"];
-  final List ratings = ["4.7", "4.3", "5.0", "3.5"];
 
 
   @override
@@ -26,6 +24,10 @@ class CardView extends ConsumerWidget {
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
+    final orderState = ref.watch(orderController);
+    final orderNotifier = ref.watch(orderController.notifier);
+    
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,20 +39,20 @@ class CardView extends ConsumerWidget {
             color: textColor(theme), fontSize: 20
           ),),
         ),
-        Expanded(
+        if(orderState.basket.isNotEmpty) Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 20),
             scrollDirection: Axis.vertical,
-            itemCount: coffees.length,
+            itemCount: orderState.basket.length,
             clipBehavior: Clip.none,
             itemBuilder: (context, index) => BasketProductWidget(
-              name: coffees[index],
-              price: prices[index],
+              basketModel: orderState.basket[index],
               onPressed: () {
 
             },),
           ),
-        ),
+        )
+        else const NoProductFound(),
 
         Container(
           width: width,
@@ -76,9 +78,10 @@ class CardView extends ConsumerWidget {
                     Text(languages[language]!["total"]!, style: kCustomTextStyle.copyWith(
                       color: Colors.white
                     ),),
-                    Text("120 TL", style: kTitleTextStyle.copyWith(
-                        color: Colors.white
-                    ),),
+                    Text("${orderState.basket.where((element) => element.totalPrice != null).toList()
+                        .fold(0.0, (previousValue, element) => previousValue + element.totalPrice!)}",
+                      style: kTitleTextStyle.copyWith(color: Colors.white),
+                    ),
                   ],
                 ),
                 CustomizableButton(
@@ -86,7 +89,10 @@ class CardView extends ConsumerWidget {
                   width: width * .35, height: 45.h,
                   child: Text(languages[language]!["order"]!, style: kCustomTextStyle),
                   onPressed: () {
-
+                    orderNotifier.createOrder(context: context,
+                      errorTitle: languages[language]!["error_creating_order"]!,
+                      successTitle: languages[language]!["success_creating_order"]!,
+                    );
                   },
                 ),
               ],

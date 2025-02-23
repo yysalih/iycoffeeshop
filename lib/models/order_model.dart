@@ -10,11 +10,12 @@ class OrderModel implements BaseModel<OrderModel> {
   final List? products;
   final double? totalPrice;
   final String? who;
+  final String? status;
 
 
   OrderModel({
     this.uid, this.totalPrice,
-    this.products, this.who
+    this.products, this.who, this.status
   });
 
   @override
@@ -22,6 +23,7 @@ class OrderModel implements BaseModel<OrderModel> {
     totalPrice: json["totalPrice"] as double?,
     products: json["products"] as List?,
     uid: json["uid"] as String?,
+    status: json["status"] as String?,
     who: json["who"] as String?,
 
   );
@@ -31,5 +33,6 @@ class OrderModel implements BaseModel<OrderModel> {
     "products": products,
     "uid": uid,
     "who": who,
+    "status": status,
   };
 }

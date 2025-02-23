@@ -5,6 +5,10 @@ const Map<String, Map<String, String>> languages = {
 };
 
 const Map<String, String> tr = {
+  "success_adding_in_basket" : "Ürün sepete eklendi",
+  "success_creating_order" : "Sipariş verildi.",
+  "error_creating_order" : "Sipariş verilirken bir hata oluştu.",
+  "no_product_found" : "Ürün bulunamadı",
   "switch_theme" : "Tema Değiştir",
   "saved_cards" : "Kayıtlı Kartlar",
   "basket" : "Sepet",
@@ -288,6 +292,13 @@ const Map<String, String> tr = {
 
 };
 const Map<String, String> en = {
+  "success_adding_in_basket" : "Product added",
+
+  "success_creating_order" : "Order created",
+  "error_creating_order" : "Error creating order!",
+
+  "no_product_found" : "No product found",
+
   "saved_cards" : "Saved Cards",
   "switch_theme" : "Switch Theme",
 
@@ -557,7 +568,12 @@ const Map<String, String> en = {
   "switch_language": "Change Language"
 };
 const Map<String, String> ar = {
-"saved_cards": "البطاقات المحفوظة",
+  "success_adding_in_basket" : "Product added",
+  "no_product_found" : "No product found",
+  "success_creating_order" : "Order created",
+  "error_creating_order" : "Error creating order!",
+
+  "saved_cards": "البطاقات المحفوظة",
 "switch_theme": "تغيير السمة",
 
 "basket": "السلة",

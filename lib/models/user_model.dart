@@ -14,12 +14,13 @@ class UserModel implements BaseModel<UserModel> {
   final String? token;
   final String? password;
   final String? phone;
+  final List? favorites;
 
 
   UserModel({this.uid, this.name, this.image,
     this.email, this.token,
     this.lastname, this.phone,
-    this.password,
+    this.password, this.favorites
   });
 
   @override
@@ -32,6 +33,7 @@ class UserModel implements BaseModel<UserModel> {
     email: json["email"] as String?,
     password: json["password"] as String?,
     phone: json["phone"] as String?,
+    favorites: json["favorites"] as List?,
 
   );
   @override
@@ -44,5 +46,6 @@ class UserModel implements BaseModel<UserModel> {
     "email": email,
     "password": password,
     "phone": phone,
+    "favorites": favorites,
   };
 }

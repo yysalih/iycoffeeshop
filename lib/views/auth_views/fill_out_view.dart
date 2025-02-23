@@ -136,9 +136,8 @@ class FillOutView extends ConsumerWidget {
 
                     customButton(title: languages[language]![toEdit ? "save" : "continue"]!,
                       color: buttonColor(theme), onPressed: () async {
-                        Navigator.push(context, routeToView(const MainView()));
                       if(!toEdit && authNotifier.isAbleToContinue) {
-                        //TODO await authNotifier.createUser(context: context, errorTitle: languages[language]!["problem_signing_up"]!);
+                        await authNotifier.createUser(context: context, errorTitle: languages[language]!["problem_signing_up"]!);
 
 
                       }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iycoffee/controllers/order_controller.dart';
+import 'package:iycoffee/models/basket_model.dart';
+import 'package:iycoffee/views/shop_views/product_inner_view.dart';
 
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
@@ -10,13 +13,11 @@ import '../favorite_button_widget.dart';
 
 class BasketProductWidget extends ConsumerWidget {
 
-  final String name;
-  final String price;
+  final BasketModel basketModel;
   final Function() onPressed;
 
   const BasketProductWidget({super.key,
-    required this.name,
-    required this.price,
+    required this.basketModel,
     required this.onPressed,
   });
 
@@ -30,7 +31,7 @@ class BasketProductWidget extends ConsumerWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    int count = 0;
+    final orderNotifier = ref.watch(orderController.notifier);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 35.h),
@@ -46,7 +47,9 @@ class BasketProductWidget extends ConsumerWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: MaterialButton(
-                  onPressed: onPressed,
+                  onPressed: () {
+                    Navigator.push(context, routeToView(ProductInnerView(uid: basketModel.productUid!)));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                     child: Column(
@@ -58,11 +61,11 @@ class BasketProductWidget extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(languages[language]![name]!, style: kTitleTextStyle.copyWith(
+                              Text(languages[language]![basketModel.productUid]!, style: kTitleTextStyle.copyWith(
                                 color: Colors.white, fontSize: 20
                             ), ),
                               SizedBox(height: 2.h,),
-                              Text("$price TL", style: kCustomTextStyle.copyWith(
+                              Text("${basketModel.totalPrice} TL", style: kCustomTextStyle.copyWith(
                                 color: Colors.grey.shade300, fontSize: 15,
                               ),),
 
@@ -81,11 +84,11 @@ class BasketProductWidget extends ConsumerWidget {
                                 iconSize: 30,
                                 elevatedPadding: 0,
                                 onPressed: () {
-                                  count--;
+                                  orderNotifier.changePiece(basketModel, isIncrement: false);
                                 },
                               ),
                             ),
-                            Text(count.toString(), style: kTitleTextStyle.copyWith(
+                            Text(basketModel.piece.toString(), style: kTitleTextStyle.copyWith(
                               color: Colors.grey.shade300
                             )),
                             Transform.scale(
@@ -97,8 +100,7 @@ class BasketProductWidget extends ConsumerWidget {
                                 iconSize: 30,
                                 elevatedPadding: 0,
                                 onPressed: () {
-                                  count++;
-
+                                  orderNotifier.changePiece(basketModel, isIncrement: true);
                                 },
                               ),
                             ),

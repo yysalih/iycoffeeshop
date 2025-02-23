@@ -100,18 +100,16 @@ class LoginView extends ConsumerWidget {
                             return customButton(title: authState.isRegister ?
                             languages[appLanguage]!["sign_up"]! :
                             languages[appLanguage]!["login"]!, color: buttonColor(theme), onPressed: () async {
-                              Navigator.push(context, routeToView(const FillOutView()));
-                              //TODO uncomment below
-                              //authNotifier.handleSignInWithEmail(authNotifier, context: context);
+
+                              authNotifier.handleSignInWithEmail(authNotifier, context: context);
                             },);
                           }
                           return customButton(
                               title: authState.isRegister ?
                           languages[appLanguage]!["sign_up"]! :
                           languages[appLanguage]!["login"]!, color: cardColor(theme), onPressed: () {
-                            Navigator.push(context, routeToView(const FillOutView()));
-                            //TODO uncomment below
-                            //authNotifier.handleSignInWithEmail(authNotifier, context: context);
+
+                            authNotifier.handleSignInWithEmail(authNotifier, context: context);
                           }, inProgress: true);
                         }
                     ),
@@ -128,30 +126,27 @@ class LoginView extends ConsumerWidget {
                               if (snapshot.connectionState == ConnectionState.done) {
                                 return ElevatedButton(
                                   onPressed: ()  {
-                                    Navigator.push(context, routeToView(const FillOutView()));
-                                    //TODO uncomment below
-                                    //authNotifier.handleSignIn(authNotifier, context: context);
+                                    authNotifier.handleSignIn(authNotifier, context: context);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: const CircleBorder(),
                                     padding: const EdgeInsets.all(10),
-                                    backgroundColor: cardColor(theme), // <-- Button color
-                                    foregroundColor: kWhite, // <-- Splash color
+                                    backgroundColor: cardColor(theme),
+                                    foregroundColor: kWhite,
                                   ),
                                   child: Image.asset("assets/icons/google.png", width: 20.w,),
                                 );
                               };
                               return ElevatedButton(
                                   onPressed: () {
-                                    Navigator.push(context, routeToView(const FillOutView()));
-                                    //TODO uncomment below
-                                    //authNotifier.handleSignIn(authNotifier, context: context);
+
+                                    authNotifier.handleSignIn(authNotifier, context: context);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: const CircleBorder(),
                                     padding: const EdgeInsets.all(10),
-                                    backgroundColor: cardColor(theme), // <-- Button color
-                                    foregroundColor: kWhite, // <-- Splash color
+                                    backgroundColor: cardColor(theme),
+                                    foregroundColor: kWhite,
                                   ),
                                   child: const CircularProgressIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -167,8 +162,7 @@ class LoginView extends ConsumerWidget {
                                 return ElevatedButton(
                                   onPressed: () async {
                                     Navigator.push(context, routeToView(const FillOutView()));
-                                    //TODO uncomment below
-                                    //authNotifier.handleSignInWithApple(authNotifier, context: context);
+                                    authNotifier.handleSignInWithApple(authNotifier, context: context);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: const CircleBorder(),
@@ -183,8 +177,7 @@ class LoginView extends ConsumerWidget {
                               return ElevatedButton(
                                 onPressed: () {
                                   Navigator.push(context, routeToView(const FillOutView()));
-                                  //TODO uncomment below
-                                  //authNotifier.handleSignInWithApple(authNotifier, context: context);
+                                  authNotifier.handleSignInWithApple(authNotifier, context: context);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   shape: const CircleBorder(),
@@ -223,9 +216,6 @@ class LoginView extends ConsumerWidget {
                           color: kDarkBackground
                       ),),
                       onPressed: () async {
-                        // final getKey = get_server_key();
-                        // final token = await getKey.server_token();
-                        // debugPrint(token.toString());
                         authNotifier.handleSignInAnonymous(authNotifier, context: context);
                       },
                     ),
