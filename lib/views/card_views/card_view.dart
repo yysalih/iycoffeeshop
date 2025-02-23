@@ -52,7 +52,7 @@ class CardView extends ConsumerWidget {
             },),
           ),
         )
-        else const NoProductFound(),
+        else const Center(child: NoProductFound()),
 
         Container(
           width: width,
@@ -85,6 +85,7 @@ class CardView extends ConsumerWidget {
                   ],
                 ),
                 CustomizableButton(
+                  isBasketEmpty: orderState.basket.isEmpty,
                   color: buttonColor(theme),
                   width: width * .35, height: 45.h,
                   child: Text(languages[language]!["order"]!, style: kCustomTextStyle),
@@ -93,6 +94,7 @@ class CardView extends ConsumerWidget {
                       errorTitle: languages[language]!["error_creating_order"]!,
                       successTitle: languages[language]!["success_creating_order"]!,
                     );
+                    orderNotifier.clearBasket();
                   },
                 ),
               ],

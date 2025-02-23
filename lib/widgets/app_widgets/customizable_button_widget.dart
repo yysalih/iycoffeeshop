@@ -9,13 +9,15 @@ class CustomizableButton extends StatelessWidget {
   final double width;
   final double height;
   final Function() onPressed;
+  final bool isBasketEmpty;
   const CustomizableButton({super.key,
     required this.child,
     required this.width,
     required this.height,
     required this.onPressed,
     this.color = kDarkSecondary,
-    this.borderRadius = 5
+    this.borderRadius = 5,
+    this.isBasketEmpty = false,
   });
 
   @override
@@ -30,7 +32,7 @@ class CustomizableButton extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
         child: MaterialButton(
-          onPressed: onPressed,
+          onPressed: isBasketEmpty ? null : onPressed,
           child: child,
         ),
       ),

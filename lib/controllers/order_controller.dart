@@ -6,6 +6,7 @@ import 'package:iycoffee/constants/app_constants.dart';
 import 'package:iycoffee/models/basket_model.dart';
 import 'package:iycoffee/models/order_model.dart';
 import 'package:iycoffee/models/product_model.dart';
+import 'package:iycoffee/views/payment_views/payment_successful_view.dart';
 import 'package:uuid/uuid.dart';
 
 import '../constants/providers.dart';
@@ -35,7 +36,7 @@ class OrderController extends StateNotifier<OrderState> {
     String uid = const Uuid().v4();
     OrderModel orderModel = OrderModel(
       uid: uid,
-      products: state.basket,
+      products: state.basket.map((e) => e.toJson(),).toList(),
       status: "sent",
       who: currentUserUid,
       totalPrice: state.basket.where((element) => element.totalPrice != null).toList()
@@ -46,7 +47,7 @@ class OrderController extends StateNotifier<OrderState> {
         .set(orderModel.toJson())
         .whenComplete(() {
       debugPrint("order created");
-      Navigator.push(context, routeToView(const MainView()));
+      Navigator.push(context, routeToView(const PaymentSuccessfulView()));
       showSnackbar(title: successTitle, context: context);
     })
         .onError((error, stackTrace) {
@@ -84,7 +85,7 @@ class OrderController extends StateNotifier<OrderState> {
   changePiece(BasketModel model, {required bool isIncrement}) {
     if (isIncrement) {
       BasketModel updatedModel = BasketModel(
-        piece: (model.piece ?? 0) + 1,
+        piece: model.piece! + 1,
         uid: model.uid,
         productUid: model.productUid,
         price: model.price,
@@ -103,7 +104,7 @@ class OrderController extends StateNotifier<OrderState> {
     }
     else {
       BasketModel updatedModel = BasketModel(
-        piece: (model.piece ?? 0) - 1,
+        piece: model.piece! - 1,
         uid: model.uid,
         productUid: model.productUid,
         price: model.price,
@@ -120,6 +121,7 @@ class OrderController extends StateNotifier<OrderState> {
         }).toList(),
       );
     }
+    debugPrint("${state.basket.map((e) => e.piece!,)}");
   }
 
   clearBasket() => state = state.copyWith(baskets: []);

@@ -5,6 +5,7 @@ const Map<String, Map<String, String>> languages = {
 };
 
 const Map<String, String> tr = {
+  "go_home" : "Ana Menüye Git",
   "success_adding_in_basket" : "Ürün sepete eklendi",
   "success_creating_order" : "Sipariş verildi.",
   "error_creating_order" : "Sipariş verilirken bir hata oluştu.",
@@ -565,9 +566,11 @@ const Map<String, String> en = {
   "camera": "Camera",
   "gallery": "Gallery",
   "may_delete_after_login": "You can delete your account after logging in again.",
-  "switch_language": "Change Language"
+  "switch_language": "Change Language",
+  "go_home" : "Go Home",
 };
 const Map<String, String> ar = {
+  "go_home" : "Go Home",
   "success_adding_in_basket" : "Product added",
   "no_product_found" : "No product found",
   "success_creating_order" : "Order created",

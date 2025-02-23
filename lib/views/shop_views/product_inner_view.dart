@@ -167,6 +167,7 @@ class ProductInnerView extends ConsumerWidget {
                                       errorTitle: languages[language]!["error_creating_order"]!,
                                       successTitle: languages[language]!["success_creating_order"]!,
                                   );
+                                  orderNotifier.clearBasket();
                                 },
                               ),
                             ],

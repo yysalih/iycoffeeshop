@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iycoffee/controllers/profile_controller.dart';
+import 'package:iycoffee/repos/user_repository.dart';
+import 'package:iycoffee/views/auth_views/fill_out_view.dart';
+import 'package:iycoffee/widgets/app_widgets/warning_info_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/app_constants.dart';
@@ -24,94 +27,99 @@ class ProfileView extends ConsumerWidget {
 
     final profileNotifier = ref.watch(profileController.notifier);
 
+    final userProvider = ref.watch(userStreamProvider(currentUserUid));
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(languages[language]!["my_profile"]!,
-            style: kTitleTextStyle.copyWith(color: textColor(theme)),),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
+    return userProvider.when(
+      data: (user) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, left: 20.0),
+            child: Text(languages[language]!["my_profile"]!,
+              style: kTitleTextStyle.copyWith(color: textColor(theme)),),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
 
-              },
-              child: Center(
-                child: CircleAvatar(
-                  radius: 30.h,
-                  backgroundColor: buttonColor(theme),
-                  child: Image.asset("assets/icons/photo.png", width: 40.w),
+                },
+                child: Center(
+                  child: CircleAvatar(
+                    radius: 40.h,
+                    backgroundColor: buttonColor(theme),
+                    backgroundImage: CachedNetworkImageProvider(user.image!),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 10.h,),
-            Text("Alican Kaya", style: kTitleTextStyle.copyWith(color: textColor(theme)),),
-            SizedBox(height: 10.h,),
-            Text("+90 553 098 11 78", style: kCustomTextStyle.copyWith(color: textColor(theme),),),
-            SizedBox(height: 10.h,),
-            Text("alicankaya@gmail.com", style: kCustomTextStyle.copyWith(color: textColor(theme),),),
-          ],
-        ),
-        Container(
-          width: width,
-          decoration: BoxDecoration(
-            color: textColor(!theme),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
+              SizedBox(height: 10.h,),
+              Text("${user.name!} ${user.lastname!}", style: kTitleTextStyle.copyWith(color: textColor(theme)),),
+              SizedBox(height: 10.h,),
+              Text(user.phone!, style: kCustomTextStyle.copyWith(color: textColor(theme),),),
+              SizedBox(height: 10.h,),
+              Text(user.email!, style: kCustomTextStyle.copyWith(color: textColor(theme),),),
+            ],
           ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ProfileButtonWidget(width: width,
-                  theme: theme,
-                  title: languages[language]!["edit_profile"]!,
-                  icon: Icons.edit,
-                  onPressed: () {
+          Container(
+            width: width,
+            decoration: BoxDecoration(
+              color: textColor(!theme),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(50)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProfileButtonWidget(width: width,
+                    theme: theme,
+                    title: languages[language]!["edit_profile"]!,
+                    icon: Icons.edit,
+                    onPressed: () {
+                      Navigator.push(context, routeToView(const FillOutView(toEdit: true,)));
+                    },),
 
-                  },),
+                  ProfileButtonWidget(width: width, theme: theme, title: languages[language]!["languages"]!, icon: Icons.language,
+                    onPressed: () {
+                      showLanguageDialog(context, language, theme, width);
+                    },),
 
-                ProfileButtonWidget(width: width, theme: theme, title: languages[language]!["languages"]!, icon: Icons.language,
-                  onPressed: () {
-                    showLanguageDialog(context, language, theme, width);
-                  },),
+                  ProfileButtonWidget(width: width, theme: theme,
+                    title: languages[language]!["theme"]!, icon: Icons.dark_mode_outlined,
+                    onPressed: () {
+                      showThemeDialog(context, language, theme, width);
+                    },),
 
-                ProfileButtonWidget(width: width, theme: theme,
-                  title: languages[language]!["theme"]!, icon: Icons.dark_mode_outlined,
-                  onPressed: () {
-                    showThemeDialog(context, language, theme, width);
-                  },),
+                  ProfileButtonWidget(width: width, theme: theme,
+                    title: languages[language]!["saved_cards"]!, icon: Icons.credit_card,
+                    onPressed: () {
 
-                ProfileButtonWidget(width: width, theme: theme,
-                  title: languages[language]!["saved_cards"]!, icon: Icons.credit_card,
-                  onPressed: () {
+                    },),
+                  ProfileButtonWidget(width: width, theme: theme,
+                    title: languages[language]!["delete_your_account"]!,
+                    icon: Icons.delete_forever_outlined,
+                    onPressed: () {
+                      //profileNotifier.deleteAccount(context, language);
+                      Navigator.pushAndRemoveUntil(context, routeToView(const LoginView()), (route) => false);
 
-                  },),
-                ProfileButtonWidget(width: width, theme: theme,
-                  title: languages[language]!["delete_your_account"]!,
-                  icon: Icons.delete_forever_outlined,
-                  onPressed: () {
-                    //profileNotifier.deleteAccount(context, language);
-                    Navigator.pushAndRemoveUntil(context, routeToView(const LoginView()), (route) => false);
-
-                  },),
-                ProfileButtonWidget(width: width, title: languages[language]!["logout"]!,
-                  theme: theme,
-                  icon: Icons.logout,
-                  onPressed: () {
-                    //profileNotifier.logout(context);
-                    Navigator.pushAndRemoveUntil(context, routeToView(const LoginView()), (route) => false);
-                  },),
-              ],
+                    },),
+                  ProfileButtonWidget(width: width, title: languages[language]!["logout"]!,
+                    theme: theme,
+                    icon: Icons.logout,
+                    onPressed: () {
+                      //profileNotifier.logout(context);
+                      Navigator.pushAndRemoveUntil(context, routeToView(const LoginView()), (route) => false);
+                    },),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
+      error: (error, stackTrace) => Container(),
+      loading: () => loadingWidget(),
     );
   }
 }

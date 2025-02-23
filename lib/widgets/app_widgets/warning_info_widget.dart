@@ -38,10 +38,13 @@ class NoProductFound extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(languageStateProvider);
+    final theme = ref.watch(themeStateProvider);
 
     return Padding(
       padding: EdgeInsets.only(top: 10.0.h),
-      child: Text(languages[language]!["no_product_found"]!, style: kCustomTextStyle,),
+      child: Text(languages[language]!["no_product_found"]!, style: kCustomTextStyle.copyWith(
+        color: textColor(theme)
+      ),),
     );
   }
 }

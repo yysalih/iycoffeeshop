@@ -32,6 +32,7 @@ class BasketProductWidget extends ConsumerWidget {
     final height = MediaQuery.of(context).size.height;
 
     final orderNotifier = ref.watch(orderController.notifier);
+    final orderState = ref.watch(orderController);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 35.h),
@@ -88,7 +89,10 @@ class BasketProductWidget extends ConsumerWidget {
                                 },
                               ),
                             ),
-                            Text(basketModel.piece.toString(), style: kTitleTextStyle.copyWith(
+                            Text(orderState.basket.where(
+                                  (element) => element.uid! == basketModel.uid!,)
+                                .toList().first.piece.toString(),
+                            style: kTitleTextStyle.copyWith(
                               color: Colors.grey.shade300
                             )),
                             Transform.scale(
