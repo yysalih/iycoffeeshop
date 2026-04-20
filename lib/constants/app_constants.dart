@@ -28,6 +28,30 @@ Color backGroundColor(bool theme) => theme ? Colors.white : kDarkAccent2;
 Color cardColor(bool theme) => theme ? kLightAccent2 : kLightBlack;
 
 
+// Primary Brand Colors
+const Color kPrimaryOrange = Color(0xFFE85B24);
+const Color kPrimaryBrown = Color(0xFF7D562C);
+
+// Orange Variants (Action & Energy)
+const Color kOrangeLight = Color(0xFFF18C67);
+const Color kOrangeDark = Color(0xFFB54116);
+const Color kOrangeSubtle = Color(0xFFFCEEE9);
+
+// Brown Variants (Warmth & Typography)
+const Color kBrownLight = Color(0xFFA67C52);
+const Color kBrownDark = Color(0xFF4B341D);
+const Color kBrownSoft = Color(0xFFDCC8B4);
+
+// Background & Neutral Variants
+const Color kBackgroundCream = Color(0xFFF9F3EE);
+const Color kSurfaceWhite = Color(0xFFFFFFFF);
+const Color kTextDark = Color(0xFF2D1F12);
+const Color kTextGrey = Color(0xFF9E9E9E);
+
+
+
+
+
 // Example usage in a ThemeData:
 
 ThemeData kLightTheme = ThemeData(
@@ -80,8 +104,8 @@ const InputDecoration kInputDecorationWithNoBorder = InputDecoration(
   focusedErrorBorder: InputBorder.none,
 );
 
-bool isUserAnonymous() => FirebaseAuth.instance.currentUser!.isAnonymous;
-String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+bool isUserAnonymous() => FirebaseAuth.instance.currentUser == null ? false : FirebaseAuth.instance.currentUser!.isAnonymous;
+String currentUserUid = FirebaseAuth.instance.currentUser == null ? "" :  FirebaseAuth.instance.currentUser!.uid;
 
 FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 

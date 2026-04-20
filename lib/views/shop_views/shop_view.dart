@@ -40,10 +40,9 @@ class ShopView extends ConsumerWidget {
     final productsProvider = ref.watch(productsStreamProvider(""));
 
     return SingleChildScrollView(  // Wrap everything in SingleChildScrollView
-      child: userProvider.when(
-        data: (user) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
 
             Container(
               width: width,
@@ -57,29 +56,54 @@ class ShopView extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Image.asset(
-                          "assets/images/logo.png",
-                          color: backGroundColor(theme),
-                          width: 250.w,
-                        ),
-                        CircleAvatar(
-                          radius: 30.h,
-                          backgroundColor: buttonColor(theme),
-                          backgroundImage: CachedNetworkImageProvider(user.image!),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30.h),
-                    Text(
-                      "${languages[language]!["welcome"]!} ${user.name} ${user.lastname}",
-                      style: kTitleTextStyle.copyWith(
-                        color: backGroundColor(theme),
-                        fontSize: 22,
+                    userProvider.when(
+                      data: (user) => Row(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Image.asset(
+                                "assets/images/logo.png",
+                                color: backGroundColor(theme),
+                                width: 250.w,
+                              ),
+                              CircleAvatar(
+                                radius: 30.h,
+                                backgroundColor: buttonColor(theme),
+                                backgroundImage: CachedNetworkImageProvider(user.image!),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 30.h),
+                          Text(
+                            "${languages[language]!["welcome"]!} ${user.name} ${user.lastname}",
+                            style: kTitleTextStyle.copyWith(
+                              color: backGroundColor(theme),
+                              fontSize: 22,
+                            ),
+                          ),
+                        ],
                       ),
+                      error: (error, stackTrace) => Column(
+                        children: [
+                          Image.asset(
+                                "assets/images/logo.png",
+                                color: backGroundColor(theme),
+                                width: 250.w,
+                          ),
+                          SizedBox(height: 30.h),
+                          Text(
+                            "${languages[language]!["welcome"]!}, ${languages[language]!["want_to_sign_up"]!}",
+                            style: kTitleTextStyle.copyWith(
+                              color: backGroundColor(theme),
+                              fontSize: 22,
+                            ),
+                          ),
+                        ],
+                      ),
+                      loading: () => const SizedBox(),
                     ),
+                    
                     SizedBox(height: 30.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -107,7 +131,7 @@ class ShopView extends ConsumerWidget {
             ),
             SizedBox(height: 40.h),
 
-            productsProvider.when(
+            /*productsProvider.when(
               data: (products) => SizedBox(
                 height: 200.h,  // Set a fixed height to make it scrollable horizontally
                 child: ListView.builder(
@@ -127,7 +151,7 @@ class ShopView extends ConsumerWidget {
               ),
               error: (error, stackTrace) => Container(),
               loading: () => loadingWidget(),
-            ),
+            ),*/
 
             SizedBox(height: 40.h),
             Padding(
@@ -156,7 +180,7 @@ class ShopView extends ConsumerWidget {
                         uid: products[index].uid!,
                       )),);
                     },
-                    userFavorites: user.favorites!,
+                    userFavorites: const []//user.favorites!,
                   ),
                 ),
               ),
@@ -164,11 +188,8 @@ class ShopView extends ConsumerWidget {
               loading: () => loadingWidget(),
             ),
 
-          ],
-        ),
-        error: (error, stackTrace) => Container(),
-        loading: () => loadingWidget(),
-      ),
+        ],
+      )
     );
   }
 

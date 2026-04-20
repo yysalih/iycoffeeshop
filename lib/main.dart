@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iycoffee/firebase_options.dart';
 import 'package:iycoffee/views/auth_views/login_view.dart';
+import 'package:iycoffee/views/main_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/app_constants.dart';
@@ -13,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    //options: DefaultFirebaseOptions.currentPlatform
+    options: DefaultFirebaseOptions.currentPlatform
   );
 
   await SystemChrome.setPreferredOrientations([
@@ -78,7 +80,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           home: child,
         );
       },
-      child: const LoginView(),
+      child: const MainView(),
     );
   }
 }
