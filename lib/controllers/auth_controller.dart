@@ -92,17 +92,17 @@ class AuthController extends StateNotifier<AuthState> {
     ),);
   }
 
-  Future<bool> checkIfUserExists(User? _user) async {
+  Future<bool> checkIfUserExists(User? user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if(_user == null) {
+    if(user == null) {
       return false;
     }
     else {
       try {
-        final snapshot = await firebaseFirestore.collection('users').doc(_user.uid).get();
+        final snapshot = await firebaseFirestore.collection('users').doc(user.uid).get();
         if(snapshot.exists) {
-          prefs.setString("uid", _user.uid);
+          prefs.setString("uid", user.uid);
           return true;
         }
         else {

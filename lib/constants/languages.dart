@@ -4,6 +4,12 @@ const Map<String, Map<String, String>> languages = {
 };
 
 const Map<String, String> tr = {
+  "settings" : "Ayarlar",
+  "store" : "Mağazalar",
+  "home" : "Ana Sayfa",
+  "wallet" : "QR",
+  "menu" : "Menü/Sipariş",
+
   "want_to_sign_up" : "Hesap oluşturmak ister misin?",
   "go_home" : "Ana Menüye Git",
   "success_adding_in_basket" : "Ürün sepete eklendi",

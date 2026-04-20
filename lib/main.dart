@@ -1,11 +1,18 @@
+import 'dart:ui';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iycoffee/firebase_options.dart';
+import 'package:iycoffee/services/shell_wrapper.dart';
 import 'package:iycoffee/views/auth_views/login_view.dart';
+import 'package:iycoffee/views/card_views/card_view.dart';
 import 'package:iycoffee/views/main_view.dart';
+import 'package:iycoffee/views/profile_views/profile_view.dart';
+import 'package:iycoffee/views/shop_views/shop_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/app_constants.dart';
@@ -57,6 +64,55 @@ class _MyAppState extends ConsumerState<MyApp> {
     }
   }
 
+  final _router = GoRouter(
+    initialLocation: "/home",
+    routes: [
+      ShellRoute(
+        builder: (context, state, child) {
+
+          final showBar = !(state.uri.toString() == "/login" ||
+              state.uri.toString() == "/fillout" ||
+              state.uri.toString().contains("imageInner"));
+
+          return ShellWrapper(
+            showBar: showBar,
+            child: child,
+          );
+        },
+        routes: [
+          GoRoute(
+            path: "/main",
+            builder: (context, state) => const MainView(),
+          ),
+          GoRoute(
+            path: "/home",
+            builder: (context, state) => ShopView(),
+          ),
+          GoRoute(
+            path: "/login",
+            builder: (context, state) => const LoginView(),
+          ),
+          GoRoute(
+            path: "/settings",
+            builder: (context, state) => const ProfileView(),
+          ),
+          GoRoute(
+            path: "/menu",
+            builder: (context, state) => CardView(),
+          ),
+          GoRoute(
+            path: "/wallet",
+            builder: (context, state) => CardView(),
+          ),
+          GoRoute(
+            path: "/store",
+            builder: (context, state) => CardView(),
+          ),
+        ],
+      ),
+
+    ]
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +121,12 @@ class _MyAppState extends ConsumerState<MyApp> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_ , child) {
-        return MaterialApp(
+        return MaterialApp.router(
           title: kAppName,
+          routerConfig: _router,
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
+            dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown},
+          ),
           builder: (context, child) {
             return MediaQuery(
               data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)),
@@ -74,13 +134,12 @@ class _MyAppState extends ConsumerState<MyApp> {
             );
           },
           debugShowCheckedModeBanner: false,
-          theme: kLightTheme, // Use the light theme
-          darkTheme: kDarkTheme, // Use the dark theme
+          theme: kLightTheme,
+          darkTheme: kDarkTheme,
           themeMode: ThemeMode.system,
-          home: child,
         );
       },
-      child: const MainView(),
+      child: const LoginView(),
     );
   }
 }

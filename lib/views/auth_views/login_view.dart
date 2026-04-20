@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iycoffee/views/auth_views/fill_out_view.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
@@ -10,11 +11,34 @@ import '../../services/authentication_service.dart';
 import '../../widgets/custom_button_widget.dart';
 import '../../widgets/input_field_widget.dart';
 
-class LoginView extends ConsumerWidget {
+class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends ConsumerState<LoginView> {
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    final authNotifier = ref.read(authController.notifier);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bool userExists = await Authentication.initializeFirebase(authNotifier: authNotifier);
+
+      if (!mounted) return;
+
+      if (userExists) {
+        context.go("/main");
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
@@ -40,41 +64,34 @@ class LoginView extends ConsumerWidget {
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
                 child: Column(
+                  spacing: 10,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset("assets/images/logo.png",),
                     SizedBox(height: 20.h,),
-                    customInputField(theme: theme, title: languages[appLanguage]!["email"]!,
+                    customInputField(theme: theme,
+                      title: languages[appLanguage]!["email"]!,
                       hintText: languages[appLanguage]!["input_email"]!,
-                      icon: Icons.local_post_office_outlined, onTap: () {
+                      icon: Icons.local_post_office_outlined,
+                      controller: authNotifier.emailController,),
 
-                      },
-                      controller: authNotifier.emailController,
-                      onChanged: (value) {
-
-                      },),
-                    SizedBox(height: 10.h,),
-                    customInputField(theme: theme, title: languages[appLanguage]!["password"]!,
+                    customInputField(
+                      theme: theme,
+                      title: languages[appLanguage]!["password"]!,
                       hintText: languages[appLanguage]!["input_password"]!,
-                      icon: Icons.password, onTap: () {
-
-                      }, controller: authNotifier.passwordController, onChanged: (value) {
-
-                      },),
+                      icon: Icons.password,
+                      controller: authNotifier.passwordController
+                    ),
                     authState.isRegister ? Column(
                       children: [
                         SizedBox(height: 10.h,),
                         customInputField(theme: theme, title: languages[appLanguage]!["password_again"]!,
                           hintText: languages[appLanguage]!["input_password_again"]!,
-                          icon: Icons.password, onTap: () {
-
-                          }, controller: authNotifier.passwordAgainController, onChanged: (value) {
-
-                          },),
+                          icon: Icons.password, controller: authNotifier.passwordAgainController,),
                       ],
                     ) : Container(),
-                    SizedBox(height: 10.h,),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -92,107 +109,46 @@ class LoginView extends ConsumerWidget {
                         ),),
                       ],
                     ),
-                    SizedBox(height: 10.h,),
-                    FutureBuilder(
-                        future: Authentication.initializeFirebase(context: context, authNotifier: authNotifier),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
-                            return customButton(title: authState.isRegister ?
-                            languages[appLanguage]!["sign_up"]! :
-                            languages[appLanguage]!["login"]!, color: buttonColor(theme), onPressed: () async {
 
-                              authNotifier.handleSignInWithEmail(authNotifier, context: context);
-                            },);
-                          }
-                          return customButton(
-                              title: authState.isRegister ?
-                          languages[appLanguage]!["sign_up"]! :
-                          languages[appLanguage]!["login"]!, color: cardColor(theme), onPressed: () {
+                    customButton(title: authState.isRegister ?
+                    languages[appLanguage]!["sign_up"]! :
+                    languages[appLanguage]!["login"]!, color: buttonColor(theme), onPressed: () async {
 
-                            authNotifier.handleSignInWithEmail(authNotifier, context: context);
-                          }, inProgress: true);
-                        }
-                    ),
-                    SizedBox(height: 10.h,),
-                    Text(languages[appLanguage]!["or"]!, 
+                      authNotifier.handleSignInWithEmail(authNotifier, context: context);
+                    },),
+
+                    Text(languages[appLanguage]!["or"]!,
                       style: kCustomTextStyle.copyWith(color: textColor(theme)),),
-                    SizedBox(height: 10.h,),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FutureBuilder(
-                            future: Authentication.initializeFirebase(context: context, authNotifier: authNotifier),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
-                                return ElevatedButton(
-                                  onPressed: ()  {
-                                    authNotifier.handleSignIn(authNotifier, context: context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    shape: const CircleBorder(),
-                                    padding: const EdgeInsets.all(10),
-                                    backgroundColor: cardColor(theme),
-                                    foregroundColor: kWhite,
-                                  ),
-                                  child: Image.asset("assets/icons/google.png", width: 20.w,),
-                                );
-                              };
-                              return ElevatedButton(
-                                  onPressed: () {
-
-                                    authNotifier.handleSignIn(authNotifier, context: context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    shape: const CircleBorder(),
-                                    padding: const EdgeInsets.all(10),
-                                    backgroundColor: cardColor(theme),
-                                    foregroundColor: kWhite,
-                                  ),
-                                  child: const CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white
-                                    ),
-                                  ));
-                            }
+                        ElevatedButton(
+                          onPressed: ()  {
+                            authNotifier.handleSignIn(authNotifier, context: context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(10),
+                            backgroundColor: cardColor(theme),
+                            foregroundColor: kWhite,
+                          ),
+                          child: Image.asset("assets/icons/google.png", width: 20.w,),
                         ),
-                        FutureBuilder(
-                            future: Authentication.initializeFirebase(context: context, authNotifier: authNotifier),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
-                                return ElevatedButton(
-                                  onPressed: () async {
-                                    Navigator.push(context, routeToView(const FillOutView()));
-                                    authNotifier.handleSignInWithApple(authNotifier, context: context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    shape: const CircleBorder(),
-                                    padding: const EdgeInsets.all(10),
-                                    backgroundColor: cardColor(theme), // <-- Button color
-                                    foregroundColor: kWhite, // <-- Splash color
-                                  ),
-                                  child: Image.asset("assets/icons/apple.png",
-                                    color: textColor(theme), width: 20.w,),
-                                );
-                              }
-                              return ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(context, routeToView(const FillOutView()));
-                                  authNotifier.handleSignInWithApple(authNotifier, context: context);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  padding: const EdgeInsets.all(10),
-                                  backgroundColor: cardColor(theme), // <-- Button color
-                                  foregroundColor: kWhite, // <-- Splash color
-                                ),
-                                child: const CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white
-                                  ),
-                                )
-                              );
-                            }
-                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            Navigator.push(context, routeToView(const FillOutView()));
+                            authNotifier.handleSignInWithApple(authNotifier, context: context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(10),
+                            backgroundColor: cardColor(theme), // <-- Button color
+                            foregroundColor: kWhite, // <-- Splash color
+                          ),
+                          child: Image.asset("assets/icons/apple.png",
+                            color: textColor(theme), width: 20.w,),
+                        )
                       ],
                     ),
                     SizedBox(height: 20.h,),
@@ -209,7 +165,7 @@ class LoginView extends ConsumerWidget {
                           style: kCustomTextStyle.copyWith(color: textColor(theme)),),
                       ],
                     ),
-                    SizedBox(height: 10.h,),
+
                     TextButton(
                       child: Text(languages[appLanguage]!["anonymous_login"]!,
                         style: kCustomTextStyle.copyWith(
@@ -228,5 +184,4 @@ class LoginView extends ConsumerWidget {
       ),
     );
   }
-
 }

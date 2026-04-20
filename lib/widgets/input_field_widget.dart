@@ -14,8 +14,8 @@ Widget customInputField({
   bool hasPrefixIcon = true,
   bool hasSuffixIcon = false,
   required TextEditingController controller,
-  required Function() onTap,
-  required Function(String value) onChanged,
+  Function()? onTap,
+  Function(String value)? onChanged,
   required bool theme
   }) {
   return Column(

@@ -21,7 +21,7 @@ class MainView extends ConsumerWidget {
     return Scaffold(
       backgroundColor: backGroundColor(theme),
       body: SafeArea(child: mainNotifier.pages[mainState.bottomIndex]),
-      bottomNavigationBar: const AppBottomBarWidget(),
+      //bottomNavigationBar: const AppBottomBarWidget(),
     );
   }
 }

@@ -1,28 +1,85 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../controllers/auth_controller.dart';
-import '../views/main_view.dart';
+
 
 
 class Authentication {
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  static Future<void> initializeGoogleSignIn() async {
+
+    try {
+      if (!kIsWeb) {
+        await GoogleSignIn.instance.initialize();
+        debugPrint("GoogleSignIn initialized successfully.");
+      } else {
+        debugPrint("GoogleSignIn: Web initialization handled by FirebaseAuth.");
+      }
+      debugPrint("GoogleSignIn initialized successfully.");
+    } catch (e, stackTrace) {
+      debugPrint("Error initializing GoogleSignIn: $e");
+      debugPrint(stackTrace.toString());
+    }
+  }
 
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
+
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      User? user;
+
+      await initializeGoogleSignIn();
+
+      if (kIsWeb) {
+
+        final provider = GoogleAuthProvider();
+        provider.setCustomParameters({'prompt': 'select_account'});
+
+        final UserCredential userCredential =
+        await _auth.signInWithPopup(provider);
+        user = userCredential.user;
+
+        debugPrint("Google Sign-In successful on web: ${user?.email}");
+        return user;
+      }
+
+      const scopes = [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'openid',
+      ];
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+
+      final GoogleSignInAccount googleSignInAccount = await googleSignIn.authenticate(scopeHint: scopes);
 
 
-    final GoogleSignIn googleSignIn = GoogleSignIn();
 
-    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      final googleSignInAuthentication = googleSignInAccount.authentication;
+      final googleAuthorization = await googleSignInAccount.authorizationClient.authorizationForScopes(scopes);
 
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+
+      if (googleAuthorization == null) {
+        debugPrint("GoogleSignIn: ID token is null after authentication.");
+        ScaffoldMessenger.of(context).showSnackBar(
+          Authentication.customSnackBar(content: 'Could not retrieve Google ID token.'),
+        );
+        return null;
+      }
+
+      if (googleSignInAuthentication.idToken == null) {
+        debugPrint("GoogleSignIn: ID token is null after authentication.");
+        ScaffoldMessenger.of(context).showSnackBar(
+          Authentication.customSnackBar(content: 'Could not retrieve Google ID token.'),
+        );
+        return null;
+      }
 
       final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
+        accessToken: googleAuthorization.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
@@ -30,8 +87,11 @@ class Authentication {
         final UserCredential userCredential = await auth.signInWithCredential(credential);
 
         user = userCredential.user;
-      } on FirebaseAuthException catch (e) {
-        print(e);
+      }
+      on FirebaseAuthException catch (e, stackTrace) {
+
+        debugPrint(e.toString());
+        debugPrint(stackTrace.toString());
         if (e.code == 'account-exists-with-different-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
             Authentication.customSnackBar(
@@ -41,7 +101,8 @@ class Authentication {
           );
         }
         else if (e.code == 'invalid-credential') {
-          print(e);
+          debugPrint(e.toString());
+          debugPrint(stackTrace.toString());
           ScaffoldMessenger.of(context).showSnackBar(
             Authentication.customSnackBar(
               content:
@@ -49,17 +110,28 @@ class Authentication {
             ),
           );
         }
-      } catch (e) {
-        print(e);
+
+      } catch (e,stackTrace) {
+        debugPrint(e.toString());
+        debugPrint(stackTrace.toString());
         ScaffoldMessenger.of(context).showSnackBar(
           Authentication.customSnackBar(
             content: 'Error occurred using Google Sign In. Try again.',
           ),
         );
       }
-    }
 
-    return user;
+      return user;
+    }
+    catch(e, stackTrace) {
+      debugPrint(e.toString());
+      debugPrint(stackTrace.toString());
+      /*showDialog(context: context, builder: (context) => AlertDialog(
+        title: SelectableText(e.toString()),
+        content: SelectableText(stackTrace.toString()),
+      ),);*/
+      return null;
+    }
   }
 
   static Future<UserCredential> signInWithApple() async {
@@ -82,6 +154,22 @@ class Authentication {
     );
   }
 
+  static Future<bool> initializeFirebase({required AuthController authNotifier}) async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool userExists = await authNotifier.checkIfUserExists(_auth.currentUser);
+
+    try {
+      if (prefs.getString("uid") == null) return false;
+      return userExists;
+    }
+    catch (E, stackTrace) {
+      debugPrint("Error initializing Firebase Auth: $E");
+      debugPrint("Error initializing Firebase Auth: $stackTrace");
+      return false;
+    }
+
+  }
 
   static Future<void> signOut({required BuildContext context}) async {
 
@@ -97,7 +185,7 @@ class Authentication {
     }
   }
 
-  static Future<void> initializeFirebase({required BuildContext context, required AuthController authNotifier}) async {
+  /*static Future<void> initializeFirebase({required BuildContext context, required AuthController authNotifier}) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     User? user = FirebaseAuth.instance.currentUser;
@@ -119,7 +207,7 @@ class Authentication {
 
     }
 
-  }
+  }*/
 
   static Future<User?> signUp({required String email, required String password}) async {
     try {
