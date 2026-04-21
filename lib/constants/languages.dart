@@ -9,6 +9,7 @@ const Map<String, String> tr = {
   "home" : "Ana Sayfa",
   "wallet" : "QR",
   "menu" : "Menü/Sipariş",
+  "hello" : "Merhaba",
 
   "want_to_sign_up" : "Hesap oluşturmak ister misin?",
   "go_home" : "Ana Menüye Git",

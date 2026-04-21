@@ -21,116 +21,72 @@ class CustomBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(languageStateProvider);
 
-    return Container(
-      height: 70.h,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(13),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        Container(
+          height: 70.h,
+          alignment: Alignment.topCenter,
+          //width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(13),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
 
-          BottomBarItem(
-            label: languages[language]!["menu"]!,
-            icon: "cup",
-            selected: currentIndex == 0,
-            onTap: () => onTap(0),
+                BottomBarItem(
+                  label: languages[language]!["menu"]!,
+                  icon: "cup",
+                  selected: currentIndex == 0,
+                  onTap: () => onTap(0),
+                ),
+                BottomBarItem(
+                  label: languages[language]!["wallet"]!,
+                  icon: "qr",
+                  selected: currentIndex == 1,
+                  onTap: () => onTap(1),
+                ),
+                SizedBox(width: 60.w),
+                /*BottomBarItem(
+                  label: languages[language]!["home"]!,
+                  icon: "rabbit",
+                  selected: currentIndex == 2,
+                  onTap: () => onTap(2),
+                ),*/
+                BottomBarItem(
+                  label: languages[language]!["store"]!,
+                  icon: "location",
+                  selected: currentIndex == 3,
+                  onTap: () => onTap(3),
+                ),
+                BottomBarItem(
+                  label: languages[language]!["settings"]!,
+                  icon: "setting",
+                  selected: currentIndex == 4,
+                  onTap: () => onTap(4),
+                ),
+              ],
+            ),
           ),
-          BottomBarItem(
-            label: languages[language]!["wallet"]!,
-            icon: "qr",
-            selected: currentIndex == 1,
-            onTap: () => onTap(1),
-          ),
-          BottomBarItem(
-            label: languages[language]!["home"]!,
-            icon: "rabbit",
-            selected: currentIndex == 2,
+        ),
+
+        Positioned(
+          top: -10.h,
+          child: CenterActionButton(
+            isActive: true,
             onTap: () => onTap(2),
           ),
-          BottomBarItem(
-            label: languages[language]!["store"]!,
-            icon: "location",
-            selected: currentIndex == 3,
-            onTap: () => onTap(3),
-          ),
-          BottomBarItem(
-            label: languages[language]!["settings"]!,
-            icon: "setting",
-            selected: currentIndex == 4,
-            onTap: () => onTap(4),
-          ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }
-
-class CustomBottomBarWeb extends ConsumerWidget {
-  final int currentIndex;
-  final Function(int) onTap;
-
-  const CustomBottomBarWeb({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(languageStateProvider);
-
-    final width = MediaQuery.of(context).size.width;
-
-    return Container(
-      width: width,
-      height: 50,
-      decoration: BoxDecoration(
-        color: kPrimaryOrange,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          BottomBarItemWeb(
-            label: languages[language]!["home"]!,
-            icon: "rabbit",
-            selected: currentIndex == 0,
-            onTap: () => onTap(0),
-          ),
-          BottomBarItemWeb(
-            label: languages[language]!["menu"]!,
-            icon: "cup",
-            selected: currentIndex == 1,
-            onTap: () => onTap(1),
-          ),
-          BottomBarItemWeb(
-            label: languages[language]!["wallet"]!,
-            icon: "qr",
-            selected: currentIndex == 2,
-            onTap: () => onTap(2),
-          ),
-          BottomBarItemWeb(
-            label: languages[language]!["store"]!,
-            icon: "location",
-            selected: currentIndex == 3,
-            onTap: () => onTap(3),
-          ),
-          BottomBarItemWeb(
-            label: languages[language]!["settings"]!,
-            icon: "setting",
-            selected: currentIndex == 4,
-            onTap: () => onTap(4),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 
 
 
@@ -148,44 +104,34 @@ class CenterActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: SizedBox(
-        width: 90.w,   // glow PNG size
-        height: 90.h,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
+      child: Stack(
 
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
-              ),
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: kPrimaryOrange,
-                  border: Border.all(color: Colors.white, width: 10),
-                ),
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      "assets/icons/glow.png",
-                      width: 120.w
-                    ),
-                    Center(
-                      child: Image.asset(
-                          "assets/icons/projects.png",
-                          width: 23.w
-                      ),
-                    ),
-                  ],
-                ),
+        children: [
+
+          Container(
+            width: 60,
+            height: 60,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  kPrimaryOrange,
+                  kOrangeLight
+                ]
+              )
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                  "assets/icons/rabbit.png",
+                  color: Colors.white,
+                  width: 35.w
               ),
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -304,6 +250,69 @@ class BottomBarItemWeb extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+
+class CustomBottomBarWeb extends ConsumerWidget {
+  final int currentIndex;
+  final Function(int) onTap;
+
+  const CustomBottomBarWeb({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final language = ref.watch(languageStateProvider);
+
+    final width = MediaQuery.of(context).size.width;
+
+    return Container(
+      width: width,
+      height: 50,
+      decoration: BoxDecoration(
+        color: kPrimaryOrange,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          BottomBarItemWeb(
+            label: languages[language]!["home"]!,
+            icon: "rabbit",
+            selected: currentIndex == 0,
+            onTap: () => onTap(0),
+          ),
+          BottomBarItemWeb(
+            label: languages[language]!["menu"]!,
+            icon: "cup",
+            selected: currentIndex == 1,
+            onTap: () => onTap(1),
+          ),
+          BottomBarItemWeb(
+            label: languages[language]!["wallet"]!,
+            icon: "qr",
+            selected: currentIndex == 2,
+            onTap: () => onTap(2),
+          ),
+          BottomBarItemWeb(
+            label: languages[language]!["store"]!,
+            icon: "location",
+            selected: currentIndex == 3,
+            onTap: () => onTap(3),
+          ),
+          BottomBarItemWeb(
+            label: languages[language]!["settings"]!,
+            icon: "setting",
+            selected: currentIndex == 4,
+            onTap: () => onTap(4),
+          ),
+        ],
+      ),
     );
   }
 }
