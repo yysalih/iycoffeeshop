@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iycoffee/constants/app_constants.dart';
+import 'package:iycoffee/models/product_model.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/v4.dart';
 
 class ProductState {
 
@@ -22,6 +25,21 @@ class ProductController extends StateNotifier<ProductState> {
         "favorites" : newList,
       });
     }
+  }
+
+  createProduct({required String title, required String image, required String description, required double price, required String category}) async {
+    ProductModel productModel = ProductModel(
+      uid: const Uuid().v4(),
+      name: title,
+      image: image,
+      description: description,
+      price: price,
+      type: category
+    );
+
+    await firebaseFirestore.collection("breakfasts").doc(productModel.uid).set(productModel.toJson()).then((value) {
+      debugPrint("${productModel.name} is created");
+    },);
   }
 }
 
