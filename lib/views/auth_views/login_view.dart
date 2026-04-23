@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iycoffee/views/auth_views/fill_out_view.dart';
+import 'package:iycoffee/widgets/app_widgets/custom_circle_button.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
@@ -48,139 +50,144 @@ class _LoginViewState extends ConsumerState<LoginView> {
     final authNotifier = ref.watch(authController.notifier);
     final authState = ref.watch(authController);
 
-    return Scaffold(
-      backgroundColor: kBlack,
-      body: Stack(
-        children: [
-          Image.asset(kBackgroundImage, width: width,
-            height: height, fit: BoxFit.cover,),
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.h),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: theme ? Colors.white : kDarkBackground,
-                  borderRadius: BorderRadius.circular(10)
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
-                child: Column(
-                  spacing: 10,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/images/logo.png",),
-                    SizedBox(height: 20.h,),
-                    customInputField(theme: theme,
-                      title: languages[appLanguage]!["email"]!,
-                      hintText: languages[appLanguage]!["input_email"]!,
-                      icon: Icons.local_post_office_outlined,
-                      controller: authNotifier.emailController,),
-
-                    customInputField(
-                      theme: theme,
-                      title: languages[appLanguage]!["password"]!,
-                      hintText: languages[appLanguage]!["input_password"]!,
-                      icon: Icons.password,
-                      controller: authNotifier.passwordController
-                    ),
-                    authState.isRegister ? Column(
-                      children: [
-                        SizedBox(height: 10.h,),
-                        customInputField(theme: theme, title: languages[appLanguage]!["password_again"]!,
-                          hintText: languages[appLanguage]!["input_password_again"]!,
-                          icon: Icons.password, controller: authNotifier.passwordAgainController,),
-                      ],
-                    ) : Container(),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () => authNotifier.switchRegister(),
-                          child: Text(authState.isRegister ?
-                          languages[appLanguage]!["already_have_account"]!
-                              : languages[appLanguage]!["no_account"]!, style: kCustomTextStyle.copyWith(
-                              color: kDarkBackground, fontSize: 15
-                          ),),
-                        ),
-                        authState.isRegister ? Container()
-                            : Text(languages[appLanguage]!["forgot_password"]!, style: kCustomTextStyle.copyWith(
-                            color: kDarkBackground, fontSize: 15
-                        ),),
-                      ],
-                    ),
-
-                    customButton(title: authState.isRegister ?
-                    languages[appLanguage]!["sign_up"]! :
-                    languages[appLanguage]!["login"]!, color: buttonColor(theme), onPressed: () async {
-
-                      authNotifier.handleSignInWithEmail(authNotifier, context: context);
-                    },),
-
-                    Text(languages[appLanguage]!["or"]!,
-                      style: kCustomTextStyle.copyWith(color: textColor(theme)),),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: ()  {
-                            authNotifier.handleSignIn(authNotifier, context: context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(10),
-                            backgroundColor: cardColor(theme),
-                            foregroundColor: kWhite,
-                          ),
-                          child: Image.asset("assets/icons/google.png", width: 20.w,),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            Navigator.push(context, routeToView(const FillOutView()));
-                            authNotifier.handleSignInWithApple(authNotifier, context: context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(10),
-                            backgroundColor: cardColor(theme), // <-- Button color
-                            foregroundColor: kWhite, // <-- Splash color
-                          ),
-                          child: Image.asset("assets/icons/apple.png",
-                            color: textColor(theme), width: 20.w,),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.h,),
-                    Wrap(
-
-                      children: [
-                        Text(languages[appLanguage]!["by_continuing"]!,
-                          style: kCustomTextStyle.copyWith(color: textColor(theme)),),
-                        Text(languages[appLanguage]!["user_agreement"]!,
-                          style: kCustomTextStyle.copyWith(
-                            color: kDarkBackground
-                        ),),
-                        Text(languages[appLanguage]!["accepted_user_agreement"]!,
-                          style: kCustomTextStyle.copyWith(color: textColor(theme)),),
-                      ],
-                    ),
-
-                    TextButton(
-                      child: Text(languages[appLanguage]!["anonymous_login"]!,
-                        style: kCustomTextStyle.copyWith(
-                          color: kDarkBackground
-                      ),),
-                      onPressed: () async {
-                        authNotifier.handleSignInAnonymous(authNotifier, context: context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.h),
+      child: Container(
+        decoration: BoxDecoration(
+            color: theme ? Colors.white : kDarkBackground,
+            borderRadius: BorderRadius.circular(10)
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0),
+        child: Column(
+          spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(languages[appLanguage]!["login"]!, style: kTitleTextStyle.copyWith(
+                  fontSize: 17.w
+                )),
+                IconButton(
+                  splashRadius: 20.w,
+                  icon: const Icon(CupertinoIcons.xmark_circle_fill, color: kTextGrey,),
+                  iconSize: 30.w,
+                  onPressed: () {
+                    context.pop();
+                  },
+                )
+              ],
             ),
-          ),
-        ],
+            Image.asset("assets/icons/rabbit2.png", width: 80.w, color: kPrimaryOrange,),
+            SizedBox(height: 20.h,),
+            customInputField(theme: theme,
+              title: languages[appLanguage]!["email"]!,
+              hintText: languages[appLanguage]!["input_email"]!,
+              icon: Icons.local_post_office_outlined,
+              controller: authNotifier.emailController,),
+
+            customInputField(
+                theme: theme,
+                title: languages[appLanguage]!["password"]!,
+                hintText: languages[appLanguage]!["input_password"]!,
+                icon: Icons.password,
+                controller: authNotifier.passwordController
+            ),
+            authState.isRegister ? Column(
+              children: [
+                SizedBox(height: 10.h,),
+                customInputField(theme: theme, title: languages[appLanguage]!["password_again"]!,
+                  hintText: languages[appLanguage]!["input_password_again"]!,
+                  icon: Icons.password, controller: authNotifier.passwordAgainController,),
+              ],
+            ) : Container(),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => authNotifier.switchRegister(),
+                  child: Text(authState.isRegister ?
+                  languages[appLanguage]!["already_have_account"]!
+                      : languages[appLanguage]!["no_account"]!, style: kCustomTextStyle.copyWith(
+                      color: kDarkBackground, fontSize: 15
+                  ),),
+                ),
+                authState.isRegister ? Container()
+                    : Text(languages[appLanguage]!["forgot_password"]!, style: kCustomTextStyle.copyWith(
+                    color: kDarkBackground, fontSize: 15
+                ),),
+              ],
+            ),
+
+            customButton(title: authState.isRegister ?
+            languages[appLanguage]!["sign_up"]! :
+            languages[appLanguage]!["login"]!, color: buttonColor(theme), onPressed: () async {
+
+              authNotifier.handleSignInWithEmail(authNotifier, context: context);
+            },),
+
+            Text(languages[appLanguage]!["or"]!,
+              style: kCustomTextStyle.copyWith(color: textColor(theme)),),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: ()  {
+                    authNotifier.handleSignIn(authNotifier, context: context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: cardColor(theme),
+                    foregroundColor: kWhite,
+                  ),
+                  child: Image.asset("assets/icons/google.png", width: 20.w,),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.push(context, routeToView(const FillOutView()));
+                    authNotifier.handleSignInWithApple(authNotifier, context: context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: cardColor(theme), // <-- Button color
+                    foregroundColor: kWhite, // <-- Splash color
+                  ),
+                  child: Image.asset("assets/icons/apple.png",
+                    color: textColor(theme), width: 20.w,),
+                )
+              ],
+            ),
+            SizedBox(height: 20.h,),
+            Wrap(
+
+              children: [
+                Text(languages[appLanguage]!["by_continuing"]!,
+                  style: kCustomTextStyle.copyWith(color: textColor(theme)),),
+                Text(languages[appLanguage]!["user_agreement"]!,
+                  style: kCustomTextStyle.copyWith(
+                      color: kDarkBackground
+                  ),),
+                Text(languages[appLanguage]!["accepted_user_agreement"]!,
+                  style: kCustomTextStyle.copyWith(color: textColor(theme)),),
+              ],
+            ),
+
+            TextButton(
+              child: Text(languages[appLanguage]!["anonymous_login"]!,
+                style: kCustomTextStyle.copyWith(
+                    color: kDarkBackground
+                ),),
+              onPressed: () async {
+                authNotifier.handleSignInAnonymous(authNotifier, context: context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

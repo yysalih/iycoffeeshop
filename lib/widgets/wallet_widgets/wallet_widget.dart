@@ -17,7 +17,7 @@ class _WalletWidgetState extends State<WalletWidget> with TickerProviderStateMix
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2500),
+      duration: const Duration(milliseconds: 4000),
     )..repeat();
   }
 
@@ -26,6 +26,7 @@ class _WalletWidgetState extends State<WalletWidget> with TickerProviderStateMix
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
 
     return Stack(
       children: [
@@ -46,10 +47,33 @@ class _WalletWidgetState extends State<WalletWidget> with TickerProviderStateMix
         Positioned(
           bottom: 0,
           left: -45,
-          child: Image.asset(
-            "assets/icons/rabbit.png",
-            color: Colors.white,
-            width: width * .7,
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              // Adjust sweepPos to move relative to the rabbit's width
+              final double sweepPos = (_controller.value * 3) - 1.5;
+
+              return ShaderMask(
+                shaderCallback: (rect) => LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [sweepPos - 0.2, sweepPos, sweepPos + 0.2],
+                  colors: [
+                    const Color(0xFFFFE5D9).withOpacity(0), // Light Peach/Copper
+                    const Color(0xFFFFCCB3),               // Bright Copper Shine
+                    const Color(0xFFFFE5D9).withOpacity(0),
+                  ],
+                ).createShader(rect),
+                blendMode: BlendMode.srcATop,
+                child: child,
+              );
+            },
+            child: Image.asset(
+              "assets/icons/rabbit.png",
+              color: Colors.white.withOpacity(1),
+              width: 280.w,
+              fit: BoxFit.fitWidth,
+            ),
           ),
         ),
 
