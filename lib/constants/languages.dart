@@ -8,6 +8,7 @@ const Map<String, String> tr = {
   "store" : "Mağazalar",
   "home" : "Ana Sayfa",
   "wallet" : "QR",
+  "payment" : "Ödeme",
   "menu" : "Menü/Sipariş",
   "hello" : "Merhaba",
   "join_now" : "Şimdi Katıl",
@@ -75,7 +76,13 @@ const Map<String, String> tr = {
   "strawberry_churro_frappuccino_description": "Tarçınlı churro lezzeti ve taze çilek sosunun sıra dışı, tatlı birleşimi.",
   "strawberry_red_velvet_mocha_description": "Kırmızı kadife keki aroması, taze çilekler ve beyaz çikolatalı mochanın eşsiz dansı.",
   "for_you" : "Senin için",
-
+  "menu2" : "Menü",
+  "my_orders" : "Siparişlerim",
+  "my_favorite" : "Favorilerim",
+  "drinks" : "İçecekler",
+  "cakes" : "Tatlılar",
+  "breakfasts" : "Kahvaltı",
+  "bakery" : "Fırın",
 
 
   "want_to_sign_up" : "Hesap oluşturmak ister misin?",

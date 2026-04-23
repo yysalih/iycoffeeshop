@@ -47,7 +47,7 @@ class CustomSquaredButton extends ConsumerWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(borderRadius),
-        border: !enableBorder ? null : Border.all(width: 1, color: borderColor),
+        border: !enableBorder ? null : Border.all(width: 1.5, color: borderColor),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),

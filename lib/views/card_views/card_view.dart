@@ -10,6 +10,7 @@ import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
 import '../../widgets/app_widgets/customizable_button_widget.dart';
+import '../../widgets/card_widgets/menu_card_widget.dart';
 import '../../widgets/cup_widget.dart';
 import '../../widgets/favorite_button_widget.dart';
 import '../../widgets/shop_widgets/product_basket_widget.dart';
@@ -31,86 +32,197 @@ class CardView extends ConsumerWidget {
     final orderNotifier = ref.watch(orderController.notifier);
     
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
+
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(languages[language]!["basket"]!, style: kTitleTextStyle.copyWith(
-            color: textColor(theme), fontSize: 20
-          ),),
-        ),
-        if(orderState.basket.isNotEmpty) Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(top: 20),
-            scrollDirection: Axis.vertical,
-            itemCount: orderState.basket.length,
-            clipBehavior: Clip.none,
-            itemBuilder: (context, index) => BasketProductWidget(
-              basketModel: orderState.basket[index],
-              onPressed: () {
-
-            },),
-          ),
-        )
-        else const Center(child: NoProductFound()),
-
         Container(
+          height: height,
           width: width,
-          decoration: BoxDecoration(
-              color: cardColor2(!theme),
-              boxShadow: [
-                BoxShadow(
-                    color: kDarkAccent.withOpacity(.2),
-                    spreadRadius: 1.0,
-                    blurRadius: 1.0
-                )
-              ]
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(languages[language]!["store"]!, style: kCustomTextStyle.copyWith(
-                      color: grayTextColor(theme), fontSize: 14.w
-                    ),),
+          color: kLightBlack2,
+        ),
+        Positioned(
+          top: height * -.275,
+          right: -35,
+          child: Image.asset("assets/icons/rabbit2.png", width: width * .65, color: kOrangeSubtle.withOpacity(.15),),
+        ),
 
-                    Row(
-                      spacing: 5,
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0, right: 10, top: 25),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(languages[language]!["menu"]!, style: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 20.w),),
+              IconButton(
+                iconSize: 30.w,
+                icon: Icon(CupertinoIcons.person_alt_circle_fill, color: reverseTextColor(theme),),
+                onPressed: () {
+
+                },
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          child: Column(
+            children: [
+              Container(
+                width: width, height: height * .75,
+                color: Colors.white,
+                child: Column(
+                  spacing: 20,
+                  children: [
+                    Column(
+
                       children: [
-                        Text("İZMİR BORNOVA", style: kTitleTextStyle.copyWith(
-                          color: reverseTextColor(theme), fontSize: 16.w
-                        ),),
-                        Icon(CupertinoIcons.chevron_down, color: reverseTextColor(theme), size: 17.w,)
+                        const SizedBox(height: 10,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+
+                              },
+                              child: Text(languages[language]!["menu2"]!, style: kTitleTextStyle.copyWith(
+                                  fontSize: 16.w, color: kPrimaryOrange
+                                )
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+
+                              },
+                              child: Text(languages[language]!["my_orders"]!, style: kTitleTextStyle.copyWith(
+                                  fontSize: 16.w, color: grayTextColor2(theme)
+                              )
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+
+                              },
+                              child: Text(languages[language]!["my_favorite"]!, style: kTitleTextStyle.copyWith(
+                                  fontSize: 16.w, color: grayTextColor2(theme)
+                              )
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 3,),
+                        Container(width: width * .9, height: 1, color: Colors.grey.shade300,),
+
                       ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 17),
+                      child: Column(
+                        spacing: 15,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MenuCardWidget(
+                                title: "drinks",
+                                image: "drinks",
+                                onPressed: () {
+
+                                },
+                              ),
+                              MenuCardWidget(
+                                title: "cakes",
+                                image: "cakes",
+                                onPressed: () {
+
+                                },
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MenuCardWidget(
+                                title: "breakfasts",
+                                image: "breakfasts",
+                                onPressed: () {
+
+                                },
+                              ),
+                              MenuCardWidget(
+                                title: "bakery",
+                                image: "bakery",
+                                onPressed: () {
+
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
-                CustomSquaredButton(
-                  enableBorder: true,
-                  borderRadius: 7,
-                  width: 70.w,
-                  height: 35.w,
-                  color: cardColor2(!theme),
-                  borderColor: reverseTextColor(theme),
-                  textStyle: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 14.w),
-                  icon: "bag",
-                  iconSize: 20.w,
-                  title: orderState.basket.length.toString(),
-                  onPressed: () {
-
-                  },
+              ),
+              Container(
+                width: width,
+                decoration: BoxDecoration(
+                    color: cardColor2(!theme),
+                    boxShadow: [
+                      BoxShadow(
+                          color: kDarkAccent.withOpacity(.2),
+                          spreadRadius: 1.0,
+                          blurRadius: 1.0
+                      )
+                    ]
                 ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(languages[language]!["store"]!, style: kCustomTextStyle.copyWith(
+                              color: grayTextColor(theme), fontSize: 14.w
+                          ),),
 
-              ],
-            ),
+                          Row(
+                            spacing: 5,
+                            children: [
+                              Text("İZMİR BORNOVA", style: kTitleTextStyle.copyWith(
+                                  color: reverseTextColor(theme), fontSize: 16.w
+                              ),),
+                              Icon(CupertinoIcons.chevron_down, color: reverseTextColor(theme), size: 17.w,)
+                            ],
+                          )
+                        ],
+                      ),
+                      CustomSquaredButton(
+                        enableBorder: true,
+                        borderRadius: 7,
+                        width: 70.w,
+                        height: 35.w,
+                        color: cardColor2(!theme),
+                        borderColor: reverseTextColor(theme),
+                        textStyle: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 14.w),
+                        icon: "bag",
+                        iconSize: 20.w,
+                        title: orderState.basket.length.toString(),
+                        onPressed: () {
+
+                        },
+                      ),
+
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
+        )
       ],
     );
   }

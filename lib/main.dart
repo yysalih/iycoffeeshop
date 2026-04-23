@@ -11,6 +11,7 @@ import 'package:iycoffee/services/shell_wrapper.dart';
 import 'package:iycoffee/views/auth_views/login_view.dart';
 import 'package:iycoffee/views/card_views/card_view.dart';
 import 'package:iycoffee/views/main_view.dart';
+import 'package:iycoffee/views/payment_views/wallet_view.dart';
 import 'package:iycoffee/views/profile_views/profile_view.dart';
 import 'package:iycoffee/views/shop_views/shop_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -102,7 +103,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           ),
           GoRoute(
             path: "/wallet",
-            builder: (context, state) => CardView(),
+            builder: (context, state) => WalletView(),
           ),
           GoRoute(
             path: "/store",
