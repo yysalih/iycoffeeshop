@@ -22,6 +22,7 @@ class CustomSquaredButton extends ConsumerWidget {
   final String title;
   final TextStyle textStyle;
   final IconData? iconData;
+  final Gradient? gradient;
 
   const CustomSquaredButton({super.key,
     this.width = 60,
@@ -37,7 +38,8 @@ class CustomSquaredButton extends ConsumerWidget {
     this.enableBorder = false,
     this.title = "",
     this.textStyle = kCustomTextStyle,
-    this.iconData
+    this.iconData,
+    this.gradient
   });
 
   @override
@@ -45,7 +47,8 @@ class CustomSquaredButton extends ConsumerWidget {
     return Container(
       width: width, height: height,
       decoration: BoxDecoration(
-        color: color,
+        gradient: gradient,
+        color: gradient != null ? null : color,
         borderRadius: BorderRadius.circular(borderRadius),
         border: !enableBorder ? null : Border.all(width: 1.5, color: borderColor),
       ),

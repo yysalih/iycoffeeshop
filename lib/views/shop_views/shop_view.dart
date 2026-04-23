@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iycoffee/constants/app_constants.dart';
 import 'package:iycoffee/constants/languages.dart';
 import 'package:iycoffee/controllers/product_controller.dart';
@@ -218,7 +219,7 @@ class _ShopViewState extends ConsumerState<ShopView> {
                                   ],
                                 ),
                                 onPressed: () {
-
+                                  context.push("/drinks");
                                 },
                               ),
                             ],
@@ -234,11 +235,11 @@ class _ShopViewState extends ConsumerState<ShopView> {
                               clipBehavior: Clip.none,
                               itemBuilder: (context, index) => DrinkCardWidget(
                                 onPressed: () {
-                                  Navigator.push(context, routeToView(ProductInnerView(uid: drinks[index].uid!,),),);
+                                  context.push("/drink", extra: {
+                                    "uid": drinks[index].uid
+                                  });
                                 },
                                 productModel: drinks[index],
-                                userFavorites: const [],
-                        
                               ),
                             ),
                           ),
@@ -272,6 +273,7 @@ class _ShopViewState extends ConsumerState<ShopView> {
                                 ),
                                 onPressed: () {
 
+                                  context.push("/cakes");
                                 },
                               ),
                             ],
@@ -287,7 +289,9 @@ class _ShopViewState extends ConsumerState<ShopView> {
                               clipBehavior: Clip.none,
                               itemBuilder: (context, index) => CakeCardWidget(
                                 onPressed: () {
-                                  Navigator.push(context, routeToView(ProductInnerView(uid: cakes[index].uid!,),),);
+                                  context.push("/cake", extra: {
+                                    "uid": cakes[index].uid
+                                  });
                                 },
                                 productModel: cakes[index],
                                 userFavorites: const [],
@@ -322,6 +326,7 @@ class _ShopViewState extends ConsumerState<ShopView> {
                                   ],
                                 ),
                                 onPressed: () {
+                                  context.push("/breakfasts");
 
                                 },
                               ),
@@ -338,7 +343,9 @@ class _ShopViewState extends ConsumerState<ShopView> {
                               clipBehavior: Clip.none,
                               itemBuilder: (context, index) => CakeCardWidget(
                                 onPressed: () {
-                                  Navigator.push(context, routeToView(ProductInnerView(uid: breakfasts[index].uid!,),),);
+                                  context.push("/breakfast", extra: {
+                                    "uid": breakfasts[index].uid
+                                  });
                                 },
                                 productModel: breakfasts[index],
                                 userFavorites: const [],

@@ -13,12 +13,18 @@ import '../favorite_button_widget.dart';
 
 class CakeCardWidget extends ConsumerWidget {
   final ProductModel productModel;
-  final Function() onPressed;
+  final Function()? onPressed;
   final List userFavorites;
+  final double scale;
+  final double padding;
+  final double fontSize;
   const CakeCardWidget({super.key,
     required this.productModel,
-    required this.onPressed,
+    this.onPressed,
     required this.userFavorites,
+    this.scale = 1.0,
+    this.padding = 20,
+    this.fontSize = 15
   });
 
 
@@ -34,11 +40,11 @@ class CakeCardWidget extends ConsumerWidget {
 
 
     return Padding(
-      padding: const EdgeInsets.only(right: 20.0),
+      padding: EdgeInsets.only(right: padding),
       child: Column(
         children: [
           Container(
-            width: width * .85, height: height * .4,
+            width: width * .85 * scale, height: height * .4 * scale,
             decoration: BoxDecoration(
               color: textColor(!theme),
               borderRadius: BorderRadius.circular(20),
@@ -55,7 +61,7 @@ class CakeCardWidget extends ConsumerWidget {
           ),
 
           Text(languages[language]![productModel.name!]!, style: kTitleTextStyle.copyWith(
-            color: textColor(theme), fontSize: 15.w
+            color: textColor(theme), fontSize: fontSize
           ),),
         ],
       ),

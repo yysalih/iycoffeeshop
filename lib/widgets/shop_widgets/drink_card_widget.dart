@@ -14,11 +14,16 @@ import '../favorite_button_widget.dart';
 class DrinkCardWidget extends ConsumerWidget {
   final ProductModel productModel;
   final Function() onPressed;
-  final List userFavorites;
-  const DrinkCardWidget({super.key,
+  final double scale;
+  final double padding;
+  final double fontSize;
+  const DrinkCardWidget({
+    super.key,
     required this.productModel,
     required this.onPressed,
-    required this.userFavorites,
+    this.padding = 20.0,
+    this.scale = 1.0,
+    this.fontSize = 13.0,
   });
 
 
@@ -34,29 +39,27 @@ class DrinkCardWidget extends ConsumerWidget {
 
 
     return Padding(
-      padding: const EdgeInsets.only(right: 20.0),
+      padding: EdgeInsets.only(right: padding),
       child: Column(
         spacing: 3,
         children: [
           GestureDetector(
-            onTap: () {
-
-            },
+            onTap: onPressed,
             child: CircleAvatar(
               backgroundColor: kBackgroundCream,
-              radius: 50.w,
+              radius: 50.w * scale,
               child: CachedNetworkImage(
                 imageUrl: productModel.image!,
-                width: 75.w,
+                width: 75.w * scale,
               ),
             ),
           ),
 
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 80.w),
+            constraints: BoxConstraints(maxWidth: 120.w),
             child: Text(languages[language]![productModel.name!]!,
               style: kTitleTextStyle.copyWith(
-                color: textColor(theme), fontSize: 13.w
+                color: textColor(theme), fontSize: fontSize
               ),
               maxLines: 2,
               textAlign: TextAlign.center,

@@ -9,6 +9,7 @@ import 'package:iycoffee/widgets/app_widgets/warning_info_widget.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
+import '../../widgets/app_widgets/card_bottom_widget.dart';
 import '../../widgets/app_widgets/customizable_button_widget.dart';
 import '../../widgets/card_widgets/menu_card_widget.dart';
 import '../../widgets/cup_widget.dart';
@@ -163,63 +164,7 @@ class CardView extends ConsumerWidget {
                   ],
                 ),
               ),
-              Container(
-                width: width,
-                decoration: BoxDecoration(
-                    color: cardColor2(!theme),
-                    boxShadow: [
-                      BoxShadow(
-                          color: kDarkAccent.withOpacity(.2),
-                          spreadRadius: 1.0,
-                          blurRadius: 1.0
-                      )
-                    ]
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(languages[language]!["store"]!, style: kCustomTextStyle.copyWith(
-                              color: grayTextColor(theme), fontSize: 14.w
-                          ),),
-
-                          Row(
-                            spacing: 5,
-                            children: [
-                              Text("İZMİR BORNOVA", style: kTitleTextStyle.copyWith(
-                                  color: reverseTextColor(theme), fontSize: 16.w
-                              ),),
-                              Icon(CupertinoIcons.chevron_down, color: reverseTextColor(theme), size: 17.w,)
-                            ],
-                          )
-                        ],
-                      ),
-                      CustomSquaredButton(
-                        enableBorder: true,
-                        borderRadius: 7,
-                        width: 70.w,
-                        height: 35.w,
-                        color: cardColor2(!theme),
-                        borderColor: reverseTextColor(theme),
-                        textStyle: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 14.w),
-                        icon: "bag",
-                        iconSize: 20.w,
-                        title: orderState.basket.length.toString(),
-                        onPressed: () {
-
-                        },
-                      ),
-
-                    ],
-                  ),
-                ),
-              ),
+              BottomCardWidget()
             ],
           ),
         )

@@ -83,6 +83,11 @@ const Map<String, String> tr = {
   "cakes" : "Tatlılar",
   "breakfasts" : "Kahvaltı",
   "bakery" : "Fırın",
+  "new_code" : "Yeni Kod Üret",
+  "add_money" : "PARA YÜKLE",
+  "for_every_drink" : "Her içecekte",
+  "earn" : "kazan",
+  "add_product" : "Sepete Ekle",
 
 
   "want_to_sign_up" : "Hesap oluşturmak ister misin?",

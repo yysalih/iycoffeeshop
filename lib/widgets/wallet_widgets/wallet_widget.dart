@@ -2,8 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iycoffee/constants/app_constants.dart';
 
-class WalletWidget extends StatelessWidget {
+class WalletWidget extends StatefulWidget {
   const WalletWidget({super.key});
+
+  @override
+  State<WalletWidget> createState() => _WalletWidgetState();
+}
+
+class _WalletWidgetState extends State<WalletWidget> with TickerProviderStateMixin{
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2500),
+    )..repeat();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +46,11 @@ class WalletWidget extends StatelessWidget {
         Positioned(
           bottom: 0,
           left: -45,
-          child: Image.asset("assets/icons/rabbit.png", color: Colors.white, width: width * .7,),
+          child: Image.asset(
+            "assets/icons/rabbit.png",
+            color: Colors.white,
+            width: width * .7,
+          ),
         ),
 
         Positioned(

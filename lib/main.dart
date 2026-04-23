@@ -9,7 +9,13 @@ import 'package:go_router/go_router.dart';
 import 'package:iycoffee/firebase_options.dart';
 import 'package:iycoffee/services/shell_wrapper.dart';
 import 'package:iycoffee/views/auth_views/login_view.dart';
+import 'package:iycoffee/views/breakfast_views/breakfast_view.dart';
+import 'package:iycoffee/views/breakfast_views/breakfasts_view.dart';
+import 'package:iycoffee/views/cake_views/cake_view.dart';
+import 'package:iycoffee/views/cake_views/cakes_view.dart';
 import 'package:iycoffee/views/card_views/card_view.dart';
+import 'package:iycoffee/views/drink_views/drink_view.dart';
+import 'package:iycoffee/views/drink_views/drinks_view.dart';
 import 'package:iycoffee/views/main_view.dart';
 import 'package:iycoffee/views/payment_views/wallet_view.dart';
 import 'package:iycoffee/views/profile_views/profile_view.dart';
@@ -108,6 +114,42 @@ class _MyAppState extends ConsumerState<MyApp> {
           GoRoute(
             path: "/store",
             builder: (context, state) => CardView(),
+          ),
+          GoRoute(
+            path: "/drinks",
+            builder: (context, state) => DrinksView(),
+          ),
+          GoRoute(
+            path: "/drink",
+            builder: (context, state) {
+              final data = state.extra == null ? {} : state.extra as Map<String, dynamic>;
+              final uid = data["uid"] as String;
+              return DrinkView(uid: uid,);
+            },
+          ),
+          GoRoute(
+            path: "/cakes",
+            builder: (context, state) => CakesView(),
+          ),
+          GoRoute(
+            path: "/cake",
+            builder: (context, state) {
+              final data = state.extra == null ? {} : state.extra as Map<String, dynamic>;
+              final uid = data["uid"] as String;
+              return CakeView(uid: uid,);
+            },
+          ),
+          GoRoute(
+            path: "/breakfasts",
+            builder: (context, state) => BreakfastsView(),
+          ),
+          GoRoute(
+            path: "/breakfast",
+            builder: (context, state) {
+              final data = state.extra == null ? {} : state.extra as Map<String, dynamic>;
+              final uid = data["uid"] as String;
+              return BreakfastView(uid: uid,);
+            },
           ),
         ],
       ),

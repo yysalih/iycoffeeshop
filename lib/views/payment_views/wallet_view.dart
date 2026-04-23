@@ -3,17 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iycoffee/controllers/order_controller.dart';
+import 'package:iycoffee/widgets/app_widgets/custom_circle_button.dart';
 import 'package:iycoffee/widgets/app_widgets/custom_squared_button.dart';
-import 'package:iycoffee/widgets/app_widgets/warning_info_widget.dart';
-
+import 'package:qr_flutter/qr_flutter.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
-import '../../widgets/app_widgets/customizable_button_widget.dart';
-import '../../widgets/card_widgets/menu_card_widget.dart';
-import '../../widgets/cup_widget.dart';
-import '../../widgets/favorite_button_widget.dart';
-import '../../widgets/shop_widgets/product_basket_widget.dart';
 import '../../widgets/wallet_widgets/wallet_widget.dart';
 
 class WalletView extends ConsumerWidget {
@@ -31,7 +26,7 @@ class WalletView extends ConsumerWidget {
 
     final orderState = ref.watch(orderController);
     final orderNotifier = ref.watch(orderController.notifier);
-    
+
 
     return Stack(
 
@@ -71,62 +66,83 @@ class WalletView extends ConsumerWidget {
               Container(
                 width: width, height: height * .82,
                 color: Colors.white,
-                child: Column(
-                  spacing: 20,
-                  children: [
-                    Column(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const WalletWidget(),
 
-                      children: [
-                        const SizedBox(height: 10,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-
-                              },
-                              child: Text(languages[language]!["menu2"]!, style: kTitleTextStyle.copyWith(
-                                  fontSize: 16.w, color: kPrimaryOrange
-                                )
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-
-                              },
-                              child: Text(languages[language]!["my_orders"]!, style: kTitleTextStyle.copyWith(
-                                  fontSize: 16.w, color: grayTextColor2(theme)
-                              )
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-
-                              },
-                              child: Text(languages[language]!["my_favorite"]!, style: kTitleTextStyle.copyWith(
-                                  fontSize: 16.w, color: grayTextColor2(theme)
-                              )
-                              ),
-                            )
-                          ],
+                      Container(
+                        decoration: BoxDecoration(
+                          color: kOrangeSubtle,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: kPrimaryBrown, width: 1),
                         ),
-                        const SizedBox(height: 3,),
-                        Container(width: width * .9, height: 1, color: Colors.grey.shade300,),
-
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 17),
-                      child: Column(
-                        spacing: 15,
-                        children: [
-                          const WalletWidget(),
-
-
-                        ],
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 5,
+                            children: [
+                              Text("${languages[language]!["for_every_drink"]!} 1", style: kTitleTextStyle.copyWith(
+                                color: kBlack, fontSize: 13.w
+                              ),),
+                              Icon(Icons.star,color: kPrimaryOrange, size: 17.w,),
+                              Text(languages[language]!["earn"]!, style: kTitleTextStyle.copyWith(
+                                  color: kBlack, fontSize: 13.w
+                              ),),
+                            ],
+                          ),
+                        ),
                       ),
-                    )
-                  ],
+
+                      QrImageView(
+                        data: 'https://berrycoffee.com/${DateTime.now().millisecondsSinceEpoch}',
+                        version: QrVersions.auto,
+                        size: 200.h,
+                        gapless: false,
+
+                        eyeStyle: const QrEyeStyle(
+                          eyeShape: QrEyeShape.square,
+                          color: kBlack,
+                        ),
+                        dataModuleStyle: const QrDataModuleStyle(
+                          dataModuleShape: QrDataModuleShape.circle,
+                          color: kBlack,
+                        ),
+                      ),
+
+                      CustomSquaredButton(
+                        width: 120.w,
+                        height: 30,
+                        borderRadius: 40,
+                        borderColor: kBlack,
+                        enableBorder: true,
+                        color: Colors.white,
+                        textStyle: kTitleTextStyle.copyWith(color: Colors.black, fontSize: 12.w),
+                        title: languages[language]!["new_code"]!,
+                        onPressed: () {
+
+                        },
+                      ),
+                      CustomSquaredButton(
+                        width: width,
+                        height: 40.h,
+                        borderRadius: 40,
+                        color: kPrimaryOrange,
+                        gradient: LinearGradient(
+                          colors: [kPrimaryOrange, kPrimaryOrange.withOpacity(.6)],
+                          begin: Alignment.topCenter, end: Alignment.bottomCenter
+                        ),
+                        textStyle: kTitleTextStyle.copyWith(color: Colors.white, fontSize: 15.w),
+                        title: languages[language]!["add_money"]!,
+                        onPressed: () {
+
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
 

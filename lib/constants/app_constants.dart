@@ -34,6 +34,7 @@ Color cardColor2(bool theme) => theme ? kLightAccent2 : kLightBlack2;
 
 // Primary Brand Colors
 const Color kPrimaryOrange = Color(0xFFE85B24);
+const Color kPrimaryOrange2 = Color(0xFFed7c50);
 const Color kPrimaryBrown = Color(0xFF7D562C);
 
 // Orange Variants (Action & Energy)
