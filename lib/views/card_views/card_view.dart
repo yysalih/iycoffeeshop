@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iycoffee/controllers/order_controller.dart';
+import 'package:iycoffee/widgets/app_widgets/custom_squared_button.dart';
 import 'package:iycoffee/widgets/app_widgets/warning_info_widget.dart';
 
 import '../../constants/app_constants.dart';
@@ -57,8 +59,7 @@ class CardView extends ConsumerWidget {
         Container(
           width: width,
           decoration: BoxDecoration(
-              color: textColor(!theme),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              color: cardColor2(!theme),
               boxShadow: [
                 BoxShadow(
                     color: kDarkAccent.withOpacity(.2),
@@ -68,35 +69,44 @@ class CardView extends ConsumerWidget {
               ]
           ),
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(languages[language]!["total"]!, style: kCustomTextStyle.copyWith(
-                      color: Colors.white
+                    Text(languages[language]!["store"]!, style: kCustomTextStyle.copyWith(
+                      color: grayTextColor(theme), fontSize: 14.w
                     ),),
-                    Text("${orderState.basket.where((element) => element.totalPrice != null).toList()
-                        .fold(0.0, (previousValue, element) => previousValue + element.totalPrice!)}",
-                      style: kTitleTextStyle.copyWith(color: Colors.white),
-                    ),
+
+                    Row(
+                      spacing: 5,
+                      children: [
+                        Text("İZMİR BORNOVA", style: kTitleTextStyle.copyWith(
+                          color: reverseTextColor(theme), fontSize: 16.w
+                        ),),
+                        Icon(CupertinoIcons.chevron_down, color: reverseTextColor(theme), size: 17.w,)
+                      ],
+                    )
                   ],
                 ),
-                CustomizableButton(
-                  isBasketEmpty: orderState.basket.isEmpty,
-                  color: buttonColor(theme),
-                  width: width * .35, height: 45.h,
-                  child: Text(languages[language]!["order"]!, style: kCustomTextStyle),
+                CustomSquaredButton(
+                  enableBorder: true,
+                  borderRadius: 7,
+                  width: 70.w,
+                  height: 35.w,
+                  color: cardColor2(!theme),
+                  borderColor: reverseTextColor(theme),
+                  textStyle: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 14.w),
+                  icon: "bag",
+                  iconSize: 20.w,
+                  title: orderState.basket.length.toString(),
                   onPressed: () {
-                    orderNotifier.createOrder(context: context,
-                      errorTitle: languages[language]!["error_creating_order"]!,
-                      successTitle: languages[language]!["success_creating_order"]!,
-                    );
-                    orderNotifier.clearBasket();
+
                   },
                 ),
+
               ],
             ),
           ),

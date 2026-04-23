@@ -30,9 +30,9 @@ class ProductInnerView extends ConsumerWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    final productProvider = ref.watch(productStreamProvider(uid));
+    final productProvider = ref.watch(drinkStreamProvider(uid));
 
-    final productNotifier = ref.watch(productController.notifier);
+    final drinksNotifier = ref.watch(drinksController.notifier);
 
     final userProvider = ref.watch(userStreamProvider(currentUserUid));
 
@@ -87,7 +87,7 @@ class ProductInnerView extends ConsumerWidget {
                                     color: textColor(theme), fontSize: 20
                                 ),),
                                 CustomizableElevatedButton(onPressed: () {
-                                  productNotifier.addFavoriteProduct(productUid: product.uid!,
+                                  drinksNotifier.addFavoriteProduct(productUid: product.uid!,
                                       userFavorites: user.favorites!);
                                 }, icon: user.favorites!.contains(product.uid!) ?
                                 Icons.favorite : Icons.favorite_border,),

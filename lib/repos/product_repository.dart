@@ -4,38 +4,38 @@ import 'package:iycoffee/constants/app_constants.dart';
 import 'package:iycoffee/models/product_model.dart';
 import '../models/user_model.dart';
 
-class ProductRepository {
+class DrinkRepository {
   final String _uid;
 
-  ProductRepository({String? uid})
+  DrinkRepository({String? uid})
       : _uid = uid ?? "";
 
 
 
-  Stream<ProductModel> getProduct() {
-    return firebaseFirestore.collection("products").doc(_uid).snapshots().map((event) {
+  Stream<ProductModel> getDrink() {
+    return firebaseFirestore.collection("drinks").doc(_uid).snapshots().map((event) {
       return ProductModel().fromJson(event.data()!);
     });
   }
 
-  Stream<List<ProductModel>> getProducts() {
-    return firebaseFirestore.collection("products").snapshots().map((snapshot) {
+  Stream<List<ProductModel>> getDrinks() {
+    return firebaseFirestore.collection("drinks").snapshots().map((snapshot) {
       return snapshot.docs.map((e) => ProductModel().fromJson(e.data())).toList();
     });
   }
 
 }
 
-final productStreamProvider = StreamProvider.autoDispose.family<ProductModel, String?>((ref, uid) {
-  final productRepository = ref.watch(productRepositoryProvider(uid));
-  return productRepository.getProduct();
+final drinkStreamProvider = StreamProvider.autoDispose.family<ProductModel, String?>((ref, uid) {
+  final drinkRepository = ref.watch(drinkRepositoryProvider(uid));
+  return drinkRepository.getDrink();
 });
 
-final productsStreamProvider = StreamProvider.autoDispose.family<List<ProductModel>, String?>((ref, uid) {
-  final productRepository = ref.watch(productRepositoryProvider(uid));
-  return productRepository.getProducts();
+final drinksStreamProvider = StreamProvider.autoDispose.family<List<ProductModel>, String?>((ref, uid) {
+  final drinkRepository = ref.watch(drinkRepositoryProvider(uid));
+  return drinkRepository.getDrinks();
 });
 
-final productRepositoryProvider = Provider.family<ProductRepository, String?>((ref, uid) {
-  return ProductRepository(uid: uid);
+final drinkRepositoryProvider = Provider.family<DrinkRepository, String?>((ref, uid) {
+  return DrinkRepository(uid: uid);
 });

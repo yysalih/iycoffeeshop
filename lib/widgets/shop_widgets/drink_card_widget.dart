@@ -11,11 +11,11 @@ import '../../constants/providers.dart';
 import '../cup_widget.dart';
 import '../favorite_button_widget.dart';
 
-class CakeCardWidget extends ConsumerWidget {
+class DrinkCardWidget extends ConsumerWidget {
   final ProductModel productModel;
   final Function() onPressed;
   final List userFavorites;
-  const CakeCardWidget({super.key,
+  const DrinkCardWidget({super.key,
     required this.productModel,
     required this.onPressed,
     required this.userFavorites,
@@ -36,27 +36,32 @@ class CakeCardWidget extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 20.0),
       child: Column(
+        spacing: 3,
         children: [
-          Container(
-            width: width * .85, height: height * .4,
-            decoration: BoxDecoration(
-              color: textColor(!theme),
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(image: CachedNetworkImageProvider(productModel.image!), fit: BoxFit.cover)
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: MaterialButton(
-                onPressed: onPressed,
-                child: Container(),
-              ),
-            )
+          GestureDetector(
+            onTap: () {
 
+            },
+            child: CircleAvatar(
+              backgroundColor: kBackgroundCream,
+              radius: 50.w,
+              child: CachedNetworkImage(
+                imageUrl: productModel.image!,
+                width: 75.w,
+              ),
+            ),
           ),
 
-          Text(languages[language]![productModel.name!]!, style: kTitleTextStyle.copyWith(
-            color: textColor(theme), fontSize: 15.w
-          ),),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 80.w),
+            child: Text(languages[language]![productModel.name!]!,
+              style: kTitleTextStyle.copyWith(
+                color: textColor(theme), fontSize: 13.w
+              ),
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     );

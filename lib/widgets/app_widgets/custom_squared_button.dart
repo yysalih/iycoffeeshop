@@ -21,6 +21,7 @@ class CustomSquaredButton extends ConsumerWidget {
   final bool enableBorder;
   final String title;
   final TextStyle textStyle;
+  final IconData? iconData;
 
   const CustomSquaredButton({super.key,
     this.width = 60,
@@ -35,7 +36,8 @@ class CustomSquaredButton extends ConsumerWidget {
     this.borderColor = kOrangeDark,
     this.enableBorder = false,
     this.title = "",
-    this.textStyle = kCustomTextStyle
+    this.textStyle = kCustomTextStyle,
+    this.iconData
   });
 
   @override
@@ -51,19 +53,19 @@ class CustomSquaredButton extends ConsumerWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         child: MaterialButton(
           onPressed: onPressed,
-          child: title.isNotEmpty ? icon.isNotEmpty
+          child: title.isNotEmpty ? (icon.isNotEmpty || iconData != null)
               ?
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 5,
                 children: [
-                  Image.asset("assets/icons/$icon.png", width: iconSize, color: iconColor,),
+                  iconData != null ? Icon(iconData, size: iconSize, color: iconColor,) : Image.asset("assets/icons/$icon.png", width: iconSize, color: iconColor,),
                   Text(title, style: textStyle,)
                 ]
               )
               :
           Text(title, style: textStyle,) :
-          Transform.scale(scale: iconPadding, child: Image.asset("assets/icons/$icon.png", width: iconSize, color: iconColor,)),
+          iconData != null ? Icon(iconData, size: iconSize, color: iconColor,) : Transform.scale(scale: iconPadding, child: Image.asset("assets/icons/$icon.png", width: iconSize, color: iconColor,)),
         ),
       ),
     );
@@ -105,7 +107,7 @@ class CustomSquaredButton2 extends ConsumerWidget {
         color: color,
           onPressed: onPressed,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
             child: Row(
               spacing: 5,
               children: [

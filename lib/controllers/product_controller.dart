@@ -37,12 +37,12 @@ class ProductController extends StateNotifier<ProductState> {
       type: category
     );
 
-    await firebaseFirestore.collection("breakfasts").doc(productModel.uid).set(productModel.toJson()).then((value) {
+    await firebaseFirestore.collection("drinks").doc(productModel.uid).set(productModel.toJson()).then((value) {
       debugPrint("${productModel.name} is created");
     },);
   }
 }
 
-final productController = StateNotifierProvider<ProductController, ProductState>(
+final drinksController = StateNotifierProvider<ProductController, ProductState>(
   (ref) => ProductController(ProductState()),
 );

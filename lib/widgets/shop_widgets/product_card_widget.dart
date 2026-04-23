@@ -28,7 +28,7 @@ class ProductCardWidget extends ConsumerWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    final productNotifier = ref.watch(productController.notifier);
+    final drinksNotifier = ref.watch(drinksController.notifier);
 
     return Padding(
       padding: const EdgeInsets.only(right: 20.0),
@@ -79,7 +79,7 @@ class ProductCardWidget extends ConsumerWidget {
                             ],
                           ),
                           CustomizableElevatedButton(onPressed: () {
-                            productNotifier.addFavoriteProduct(productUid: productModel.uid!,
+                            drinksNotifier.addFavoriteProduct(productUid: productModel.uid!,
                                 userFavorites: userFavorites);
                           }, icon: userFavorites.contains(productModel.uid!) ?
                               Icons.favorite : Icons.favorite_border,),

@@ -22,11 +22,13 @@ const Color kDarkAccent = Color(0xFF6D4C41); // Dark caramel
 const Color kDarkAccent2 = Color(0xFF685454); // Dark caramel
 
 Color textColor(bool theme) => theme ? kLightText : kDarkText;
+Color grayTextColor(bool theme) => theme ? Colors.grey.shade400 : kDarkText;
 Color reverseTextColor(bool theme) => !theme ? kLightText : Colors.white;
 Color reverseBackgroundColor(bool theme) => theme ? kDarkSecondary : kLightBackground;
 Color buttonColor(bool theme) => theme ? kDarkAccent : kLightSecondary;
 Color backGroundColor(bool theme) => theme ? Colors.white : kDarkAccent2;
 Color cardColor(bool theme) => theme ? kLightAccent2 : kLightBlack;
+Color cardColor2(bool theme) => theme ? kLightAccent2 : kLightBlack2;
 
 
 // Primary Brand Colors
