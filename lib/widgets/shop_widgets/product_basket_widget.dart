@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iycoffee/controllers/order_controller.dart';
-import 'package:iycoffee/models/basket_model.dart';
+import 'package:iycoffee/models/cart_item_model.dart';
 import 'package:iycoffee/views/shop_views/product_inner_view.dart';
 
 import '../../constants/app_constants.dart';
@@ -13,7 +13,7 @@ import '../favorite_button_widget.dart';
 
 class BasketProductWidget extends ConsumerWidget {
 
-  final BasketModel basketModel;
+  final CartItemModel basketModel;
   final Function() onPressed;
 
   const BasketProductWidget({super.key,
@@ -89,7 +89,7 @@ class BasketProductWidget extends ConsumerWidget {
                                 },
                               ),
                             ),
-                            Text(orderState.basket.where(
+                            Text(orderState.cart.where(
                                   (element) => element.uid! == basketModel.uid!,)
                                 .toList().first.piece.toString(),
                             style: kTitleTextStyle.copyWith(

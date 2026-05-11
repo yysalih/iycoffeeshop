@@ -3,21 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iycoffee/controllers/order_controller.dart';
-import 'package:iycoffee/widgets/app_widgets/custom_squared_button.dart';
-import 'package:iycoffee/widgets/app_widgets/warning_info_widget.dart';
 
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
 import '../../widgets/app_widgets/card_bottom_widget.dart';
-import '../../widgets/app_widgets/customizable_button_widget.dart';
 import '../../widgets/card_widgets/menu_card_widget.dart';
-import '../../widgets/cup_widget.dart';
-import '../../widgets/favorite_button_widget.dart';
-import '../../widgets/shop_widgets/product_basket_widget.dart';
 
-class CardView extends ConsumerWidget {
-  CardView({super.key});
+class MenuView extends ConsumerWidget {
+  MenuView({super.key});
 
 
 
@@ -116,7 +110,7 @@ class CardView extends ConsumerWidget {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 17),
+                      padding: const EdgeInsets.symmetric(horizontal: 17),
                       child: Column(
                         spacing: 15,
                         children: [
@@ -164,7 +158,7 @@ class CardView extends ConsumerWidget {
                   ],
                 ),
               ),
-              BottomCardWidget()
+              const BottomCardWidget()
             ],
           ),
         )

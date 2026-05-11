@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iycoffee/constants/app_constants.dart';
-import 'package:iycoffee/models/basket_model.dart';
+import 'package:iycoffee/models/cart_item_model.dart';
 import 'package:iycoffee/models/product_model.dart';
 import '../models/order_model.dart';
 import '../models/user_model.dart';

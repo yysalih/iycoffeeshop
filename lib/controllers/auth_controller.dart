@@ -118,7 +118,7 @@ class AuthController extends StateNotifier<AuthState> {
 
   createUser({required BuildContext context, required String errorTitle}) async {
 
-    String? token = await FirebaseMessaging.instance.getToken();
+    //String? token = await FirebaseMessaging.instance.getToken();
 
     UserModel userModel = UserModel(
         name: nameController.text,
@@ -128,7 +128,7 @@ class AuthController extends StateNotifier<AuthState> {
         password: passwordController.text,
         phone: phoneController.text,
         lastname: surnameController.text,
-        token: token,
+        token: "token",
       favorites: []
     );
 

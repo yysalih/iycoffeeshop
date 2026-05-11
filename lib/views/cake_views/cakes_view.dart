@@ -3,18 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iycoffee/controllers/order_controller.dart';
 import 'package:iycoffee/repos/cake_repository.dart';
-import 'package:iycoffee/widgets/app_widgets/custom_squared_button.dart';
-import "package:qr_flutter/qr_flutter.dart";
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
-import '../../repos/product_repository.dart';
 import '../../widgets/app_widgets/warning_info_widget.dart';
 import '../../widgets/shop_widgets/cake_card_widget.dart';
-import '../../widgets/shop_widgets/drink_card_widget.dart';
-import '../../widgets/wallet_widgets/wallet_widget.dart';
 import '../shop_views/product_inner_view.dart';
 
 class CakesView extends ConsumerWidget {
@@ -48,7 +42,7 @@ class CakesView extends ConsumerWidget {
         ),
 
         Padding(
-          padding: const EdgeInsets.only(left: 0.0, top: 25),
+          padding: const EdgeInsets.only(left: 0.0, top: 35),
           child: Row(
             spacing: 10,
             children: [
@@ -71,14 +65,18 @@ class CakesView extends ConsumerWidget {
                 child: cakesProvider.when(
                   data: (cakes) => GridView.builder(
                     itemCount: cakes.length,
+                    padding: const EdgeInsets.only(bottom: 20),
 
                     itemBuilder: (context, index) => CakeCardWidget(
                       padding: 0,
                       scale: 0.5,
                       productModel: cakes[index],
-                      userFavorites: [],
+                      userFavorites: const [],
                       onPressed: () {
-                        Navigator.push(context, routeToView(ProductInnerView(uid: cakes[index].uid!,),),);
+
+                        context.push("/cake", extra: {
+                          "uid": cakes[index].uid
+                        });
                       },
 
                     ),

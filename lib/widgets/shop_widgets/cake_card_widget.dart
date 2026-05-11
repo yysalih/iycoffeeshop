@@ -48,7 +48,10 @@ class CakeCardWidget extends ConsumerWidget {
             decoration: BoxDecoration(
               color: textColor(!theme),
               borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(image: CachedNetworkImageProvider(productModel.image!), fit: BoxFit.cover)
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(productModel.image!, maxHeight: 1000, maxWidth: 1000), 
+                fit: BoxFit.cover,
+              )
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
@@ -62,7 +65,7 @@ class CakeCardWidget extends ConsumerWidget {
 
           Text(languages[language]![productModel.name!]!, style: kTitleTextStyle.copyWith(
             color: textColor(theme), fontSize: fontSize
-          ),),
+          ), textAlign: TextAlign.center, maxLines: 1,),
         ],
       ),
     );

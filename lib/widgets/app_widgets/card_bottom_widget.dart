@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
@@ -96,11 +97,9 @@ class BottomCardWidget extends ConsumerWidget {
                   textStyle: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 14.w),
                   icon: "bag",
                   iconSize: 20.w,
-                  title: orderState.basket.length.toString(),
+                  title: orderState.cart.length.toString(),
                   onPressed: () {
-                    if(onPressed != null) {
-                      onPressed!();
-                    }
+                    context.push("/card");
                   },
                 ),
               ],

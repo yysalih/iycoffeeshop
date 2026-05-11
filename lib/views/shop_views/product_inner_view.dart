@@ -144,10 +144,10 @@ class ProductInnerView extends ConsumerWidget {
                                     const Icon(Icons.shopping_cart_outlined,
                                       size: 17,
                                       color: Colors.white,),
-                                    if(orderState.basket.where((element) =>
+                                    if(orderState.cart.where((element) =>
                                     element.productUid == product.uid!,).toList().isNotEmpty) ...[
                                       SizedBox(width: 5.w,),
-                                      Text(orderState.basket.where((element) =>
+                                      Text(orderState.cart.where((element) =>
                                       element.productUid == product.uid!,).toList().first.piece.toString(),
                                           style: kCustomTextStyle),
                                     ]

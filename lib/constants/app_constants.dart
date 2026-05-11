@@ -52,6 +52,7 @@ const Color kBackgroundCream = Color(0xFFF9F3EE);
 const Color kSurfaceWhite = Color(0xFFFFFFFF);
 const Color kTextDark = Color(0xFF2D1F12);
 const Color kTextGrey = Color(0xFF9E9E9E);
+const Color kLightGrey = Color(0xFFd8d8d8);
 
 
 

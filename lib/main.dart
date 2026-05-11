@@ -13,7 +13,7 @@ import 'package:iycoffee/views/breakfast_views/breakfast_view.dart';
 import 'package:iycoffee/views/breakfast_views/breakfasts_view.dart';
 import 'package:iycoffee/views/cake_views/cake_view.dart';
 import 'package:iycoffee/views/cake_views/cakes_view.dart';
-import 'package:iycoffee/views/card_views/card_view.dart';
+import 'package:iycoffee/views/card_views/menu_view.dart';
 import 'package:iycoffee/views/drink_views/drink_view.dart';
 import 'package:iycoffee/views/drink_views/drinks_view.dart';
 import 'package:iycoffee/views/main_view.dart';
@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/app_constants.dart';
 import 'constants/providers.dart';
+import 'views/card_views/cart_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -93,7 +94,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           ),
           GoRoute(
             path: "/home",
-            builder: (context, state) => ShopView(),
+            builder: (context, state) => const ShopView(),
           ),
           GoRoute(
             path: "/login",
@@ -105,7 +106,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           ),
           GoRoute(
             path: "/menu",
-            builder: (context, state) => CardView(),
+            builder: (context, state) => MenuView(),
           ),
           GoRoute(
             path: "/wallet",
@@ -113,7 +114,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           ),
           GoRoute(
             path: "/store",
-            builder: (context, state) => CardView(),
+            builder: (context, state) => MenuView(),
           ),
           GoRoute(
             path: "/drinks",
@@ -150,6 +151,10 @@ class _MyAppState extends ConsumerState<MyApp> {
               final uid = data["uid"] as String;
               return BreakfastView(uid: uid,);
             },
+          ), 
+          GoRoute(
+            path: "/card",
+            builder: (context, state) => const CartView(),
           ),
         ],
       ),

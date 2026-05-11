@@ -4,28 +4,33 @@ import 'base_model.dart';
 
 @JsonSerializable()
 @immutable
-class BasketModel implements BaseModel<BasketModel> {
+class CartItemModel implements BaseModel<CartItemModel> {
 
   final String? uid;
   final String? productUid;
   final double? price;
   final double? totalPrice;
   final int? piece;
+  final String? type;
 
 
-  BasketModel({
+  const CartItemModel({
     this.uid,
-    this.price, this.totalPrice,
-    this.productUid, this.piece
+    this.price, 
+    this.totalPrice,
+    this.productUid, 
+    this.piece,
+    this.type
   });
 
   @override
-  BasketModel fromJson(Map<String, dynamic> json) => BasketModel(
+  CartItemModel fromJson(Map<String, dynamic> json) => CartItemModel(
     totalPrice: json["totalPrice"] as double?,
     price: json["price"] as double?,
     productUid: json["productUid"] as String?,
     uid: json["uid"] as String?,
     piece: json["piece"] as int?,
+    type: json["type"] as String?,
 
   );
   @override
@@ -35,5 +40,6 @@ class BasketModel implements BaseModel<BasketModel> {
     "uid": uid,
     "price": price,
     "piece": piece,
+    "type": type
   };
 }

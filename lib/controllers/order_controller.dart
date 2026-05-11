@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iycoffee/constants/app_constants.dart';
-import 'package:iycoffee/models/basket_model.dart';
+import 'package:iycoffee/models/cart_item_model.dart';
 import 'package:iycoffee/models/order_model.dart';
 import 'package:iycoffee/models/product_model.dart';
 import 'package:iycoffee/views/payment_views/payment_successful_view.dart';
@@ -11,16 +10,15 @@ import 'package:uuid/uuid.dart';
 
 import '../constants/providers.dart';
 import '../constants/snackbars.dart';
-import '../views/main_view.dart';
 
 class OrderState {
-  final List<BasketModel> basket;
+  final List<CartItemModel> cart;
 
-  OrderState({required this.basket});
+  OrderState({required this.cart});
 
-  OrderState copyWith({List<BasketModel>? baskets}) {
+  OrderState copyWith({List<CartItemModel>? cart}) {
     return OrderState(
-      basket: baskets ?? this.basket
+      cart: cart ?? this.cart
     );
   }
 }
@@ -36,10 +34,10 @@ class OrderController extends StateNotifier<OrderState> {
     String uid = const Uuid().v4();
     OrderModel orderModel = OrderModel(
       uid: uid,
-      products: state.basket.map((e) => e.toJson(),).toList(),
+      products: state.cart.map((e) => e.toJson(),).toList(),
       status: "sent",
       who: currentUserUid,
-      totalPrice: state.basket.where((element) => element.totalPrice != null).toList()
+      totalPrice: state.cart.where((element) => element.totalPrice != null).toList()
           .fold(0.0, (previousValue, element) => previousValue! + element.totalPrice!)
     );
 
@@ -60,40 +58,43 @@ class OrderController extends StateNotifier<OrderState> {
   }
 
   addProduct(ProductModel value, int piece) {
-    BasketModel basketModel = BasketModel(
+    CartItemModel basketModel = CartItemModel(
         uid: const Uuid().v4(),
         totalPrice: value.price!,
         price: value.price!,
         piece: piece,
-        productUid: value.uid!
+        productUid: value.uid!,
+        type: value.type!
     );
-    state = state.copyWith(baskets: state.basket..add(basketModel),);
+    state = state.copyWith(cart: state.cart..add(basketModel),);
   }
 
   addProductInBasket(ProductModel product, int piece) {
-    BasketModel basketModel = BasketModel(
+    CartItemModel basketModel = CartItemModel(
       uid: const Uuid().v4(),
       totalPrice: product.price! * piece,
       price: product.price!,
       piece: piece,
-      productUid: product.uid!
+      productUid: product.uid!,
+      type: product.type!
     );
 
-    state = state.copyWith(baskets: state.basket..add(basketModel),);
+    state = state.copyWith(cart: state.cart..add(basketModel),);
   }
 
-  changePiece(BasketModel model, {required bool isIncrement}) {
+  changePiece(CartItemModel model, {required bool isIncrement}) {
     if (isIncrement) {
-      BasketModel updatedModel = BasketModel(
+      CartItemModel updatedModel = CartItemModel(
         piece: model.piece! + 1,
         uid: model.uid,
         productUid: model.productUid,
         price: model.price,
         totalPrice: model.totalPrice,
+        type: model.type
       ).fromJson(model.toJson());
 
       state = state.copyWith(
-        baskets: state.basket.map((basketItem) {
+        cart: state.cart.map((basketItem) {
           if (basketItem.uid == updatedModel.uid) {
             return updatedModel;
           } else {
@@ -103,16 +104,17 @@ class OrderController extends StateNotifier<OrderState> {
       );
     }
     else {
-      BasketModel updatedModel = BasketModel(
+      CartItemModel updatedModel = CartItemModel(
         piece: model.piece! - 1,
         uid: model.uid,
         productUid: model.productUid,
         price: model.price,
         totalPrice: model.totalPrice,
+        type: model.type
       ).fromJson(model.toJson());
 
       state = state.copyWith(
-        baskets: state.basket.map((basketItem) {
+        cart: state.cart.map((basketItem) {
           if (basketItem.uid == updatedModel.uid) {
             return updatedModel;
           } else {
@@ -121,12 +123,12 @@ class OrderController extends StateNotifier<OrderState> {
         }).toList(),
       );
     }
-    debugPrint("${state.basket.map((e) => e.piece!,)}");
+    debugPrint("${state.cart.map((e) => e.piece!,)}");
   }
 
-  clearBasket() => state = state.copyWith(baskets: []);
+  clearBasket() => state = state.copyWith(cart: []);
 }
 
 final orderController = StateNotifierProvider<OrderController, OrderState>(
-  (ref) => OrderController(OrderState(basket: []),),
+  (ref) => OrderController(OrderState(cart: []),),
 );
