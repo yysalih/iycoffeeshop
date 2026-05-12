@@ -26,8 +26,7 @@ class OrderState {
 class OrderController extends StateNotifier<OrderState> {
   OrderController(super.state);
 
-  createOrder({required BuildContext context, required String errorTitle,
-    required String successTitle}) async {
+  createOrder({required BuildContext context, required String errorTitle, required String successTitle}) async {
 
     String? token = await FirebaseMessaging.instance.getToken();
 
@@ -83,47 +82,27 @@ class OrderController extends StateNotifier<OrderState> {
   }
 
   changePiece(CartItemModel model, {required bool isIncrement}) {
-    if (isIncrement) {
-      CartItemModel updatedModel = CartItemModel(
-        piece: model.piece! + 1,
-        uid: model.uid,
-        productUid: model.productUid,
-        price: model.price,
-        totalPrice: model.totalPrice,
-        type: model.type
-      ).fromJson(model.toJson());
+    int newPiece = isIncrement ? (model.piece! + 1) : (model.piece! - 1);
 
+    if (newPiece < 1) {
       state = state.copyWith(
-        cart: state.cart.map((basketItem) {
-          if (basketItem.uid == updatedModel.uid) {
-            return updatedModel;
-          } else {
-            return basketItem;
+        cart: state.cart.where((item) => item.uid != model.uid).toList(),
+      );
+    } else {
+      state = state.copyWith(
+        cart: state.cart.map((item) {
+          if (item.uid == model.uid) {
+            return item.copyWith(
+              piece: newPiece,
+              totalPrice: item.price! * newPiece,
+            );
           }
+          return item;
         }).toList(),
       );
     }
-    else {
-      CartItemModel updatedModel = CartItemModel(
-        piece: model.piece! - 1,
-        uid: model.uid,
-        productUid: model.productUid,
-        price: model.price,
-        totalPrice: model.totalPrice,
-        type: model.type
-      ).fromJson(model.toJson());
 
-      state = state.copyWith(
-        cart: state.cart.map((basketItem) {
-          if (basketItem.uid == updatedModel.uid) {
-            return updatedModel;
-          } else {
-            return basketItem;
-          }
-        }).toList(),
-      );
-    }
-    debugPrint("${state.cart.map((e) => e.piece!,)}");
+    debugPrint("Current Cart Pieces: ${state.cart.map((e) => e.toJson())}");
   }
 
   clearBasket() => state = state.copyWith(cart: []);

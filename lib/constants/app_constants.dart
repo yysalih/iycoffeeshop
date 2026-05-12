@@ -28,7 +28,7 @@ Color reverseTextColor(bool theme) => !theme ? kLightText : Colors.white;
 Color reverseBackgroundColor(bool theme) => theme ? kDarkSecondary : kLightBackground;
 Color buttonColor(bool theme) => theme ? kDarkAccent : kLightSecondary;
 Color backGroundColor(bool theme) => theme ? Colors.white : kDarkAccent2;
-Color cardColor(bool theme) => theme ? kLightAccent2 : kLightBlack;
+Color cardColor(bool theme) => theme ? kOrangeSubtle : kLightBlack;
 Color cardColor2(bool theme) => theme ? kLightAccent2 : kLightBlack2;
 
 
@@ -53,6 +53,7 @@ const Color kSurfaceWhite = Color(0xFFFFFFFF);
 const Color kTextDark = Color(0xFF2D1F12);
 const Color kTextGrey = Color(0xFF9E9E9E);
 const Color kLightGrey = Color(0xFFd8d8d8);
+const Color kLightGrey2 = Color(0xFFe0e0e0);
 
 
 
@@ -93,6 +94,7 @@ const Color kBlueColor= Colors.blueAccent;
 const TextStyle kTitleTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 17, fontFamily: appFont);
 const TextStyle kCustomTextStyle = TextStyle(fontSize: 15, fontFamily: appFont, color: kWhite);
 
+
 const InputDecoration kInputDecoration = InputDecoration(
   border: InputBorder.none,
   errorBorder: InputBorder.none,
@@ -102,13 +104,41 @@ const InputDecoration kInputDecoration = InputDecoration(
   focusedErrorBorder: InputBorder.none,
 );
 
-const InputDecoration kInputDecorationWithNoBorder = InputDecoration(
-  border: InputBorder.none,
-  errorBorder: InputBorder.none,
-  disabledBorder: InputBorder.none,
-  enabledBorder: InputBorder.none,
-  focusedBorder: InputBorder.none,
-  focusedErrorBorder: InputBorder.none,
+InputDecoration kStrokedInputDecoration = InputDecoration(
+  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: kLightGrey2, width: 0.75)),
+  errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: kLightGrey2, width: 0.75)),
+  disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: kLightGrey2, width: 0.75)),
+  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: kLightGrey2, width: 0.75)),
+  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: kLightGrey2, width: 0.75)),
+  focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: kLightGrey2, width: 0.75)),
+);
+
+
+InputDecoration kBorderInputDecoration = InputDecoration(
+  border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.red, width: 1)
+  ),
+  errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.red, width: 1)
+  ),
+  disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.red, width: 1)
+  ),
+  enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.red, width: 1)
+  ),
+  focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.red, width: 1)
+  ),
+  focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.red, width: 1)
+  ),
 );
 
 bool isUserAnonymous() => FirebaseAuth.instance.currentUser == null ? false : FirebaseAuth.instance.currentUser!.isAnonymous;

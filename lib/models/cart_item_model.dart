@@ -42,4 +42,19 @@ class CartItemModel implements BaseModel<CartItemModel> {
     "piece": piece,
     "type": type
   };
+
+  CartItemModel copyWith({
+    String? uid,
+    String? productUid,
+    double? price,
+    double? totalPrice,
+    int? piece
+  }) => CartItemModel(
+    uid: uid ?? this.uid,
+    productUid: productUid ?? this.productUid,
+    price: price ?? this.price,
+    totalPrice: totalPrice ?? this.totalPrice,
+    piece: piece ?? this.piece,
+    type: type ?? this.type
+  );
 }

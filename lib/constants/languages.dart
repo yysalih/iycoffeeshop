@@ -89,6 +89,7 @@ const Map<String, String> tr = {
   "earn" : "kazan",
   "add_product" : "Sepete Ekle",
   "my_cart" : "Sepetim",
+  "confirm" : "Onayla",
 
 
   "want_to_sign_up" : "Hesap oluşturmak ister misin?",
@@ -269,6 +270,7 @@ const Map<String, String> tr = {
   "snickers_description": "Yer fıstığı, karamel ve çikolatanın meşhur uyumunu sunan katmanlı ve doyurucu pasta.",
   "tiramisu_description": "Espresso ile ıslatılmış kedidili bisküvileri ve gerçek maskarpon peynirli hafif krema.",
   "problem_signing_up": "Kayıt olurken bir hata oluştu!",
+  "complete_order" : "Siparişi Tamamla",
   
   "already_have_account": "Zaten hesabım var",
   "no_account": "Hesabım yok",
@@ -276,7 +278,6 @@ const Map<String, String> tr = {
   "name": "İsim",
   "surname": "Soyisim",
   "continue": "Devam Et",
-  "confirm": "Onayla",
   "input_email": "Email adresinizi giriniz.",
   "input_password": "Şifrenizi giriniz.",
   "input_password_again": "Şifrenizi tekrar giriniz.",

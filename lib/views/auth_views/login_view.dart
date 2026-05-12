@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iycoffee/views/auth_views/fill_out_view.dart';
 import 'package:iycoffee/widgets/app_widgets/custom_circle_button.dart';
+import 'package:iycoffee/widgets/app_widgets/custom_input_field_widget.dart';
+import 'package:iycoffee/widgets/app_widgets/custom_squared_button.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
@@ -59,77 +61,95 @@ class _LoginViewState extends ConsumerState<LoginView> {
         ),
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0),
         child: Column(
-          spacing: 10,
+          spacing: 5,
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              spacing: 20,
               children: [
-                Text(languages[appLanguage]!["login"]!, style: kTitleTextStyle.copyWith(
-                  fontSize: 17.w
-                )),
-                IconButton(
-                  splashRadius: 20.w,
-                  icon: const Icon(CupertinoIcons.xmark_circle_fill, color: kTextGrey,),
-                  iconSize: 30.w,
-                  onPressed: () {
-                    context.pop();
-                  },
-                )
-              ],
-            ),
-            Image.asset("assets/icons/rabbit2.png", width: 80.w, color: kPrimaryOrange,),
-            SizedBox(height: 20.h,),
-            customInputField(theme: theme,
-              title: languages[appLanguage]!["email"]!,
-              hintText: languages[appLanguage]!["input_email"]!,
-              icon: Icons.local_post_office_outlined,
-              controller: authNotifier.emailController,),
-
-            customInputField(
-                theme: theme,
-                title: languages[appLanguage]!["password"]!,
-                hintText: languages[appLanguage]!["input_password"]!,
-                icon: Icons.password,
-                controller: authNotifier.passwordController
-            ),
-            authState.isRegister ? Column(
-              children: [
-                SizedBox(height: 10.h,),
-                customInputField(theme: theme, title: languages[appLanguage]!["password_again"]!,
-                  hintText: languages[appLanguage]!["input_password_again"]!,
-                  icon: Icons.password, controller: authNotifier.passwordAgainController,),
-              ],
-            ) : Container(),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () => authNotifier.switchRegister(),
-                  child: Text(authState.isRegister ?
-                  languages[appLanguage]!["already_have_account"]!
-                      : languages[appLanguage]!["no_account"]!, style: kCustomTextStyle.copyWith(
-                      color: kDarkBackground, fontSize: 15
-                  ),),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(languages[appLanguage]!["login"]!, style: kTitleTextStyle.copyWith(
+                        fontSize: 15.w
+                      ),
+                    ),
+                    IconButton(
+                      splashRadius: 20.w,
+                      icon: const Icon(CupertinoIcons.clear_thick_circled, color: kLightGrey,),
+                      iconSize: 25.w,
+                      onPressed: () {
+                        context.pop();
+                      },
+                    )
+                  ],
                 ),
-                authState.isRegister ? Container()
-                    : Text(languages[appLanguage]!["forgot_password"]!, style: kCustomTextStyle.copyWith(
-                    color: kDarkBackground, fontSize: 15
-                ),),
+                Image.asset("assets/icons/rabbit2.png", width: 130.w, color: kPrimaryOrange,),
+
+                Column(
+                  spacing: 10,
+                  children: [
+                    CustomInputField(
+                      titleColor: textColor(theme),
+                      title: languages[appLanguage]!["email"]!,
+                      hintText: languages[appLanguage]!["input_email"]!,
+                      controller: authNotifier.emailController,),
+
+                    CustomInputField(
+
+                        titleColor: textColor(theme),
+                        title: languages[appLanguage]!["password"]!,
+                        hintText: languages[appLanguage]!["input_password"]!,
+                        controller: authNotifier.passwordController
+                    ),
+                    if(authState.isRegister) CustomInputField(
+                      titleColor: textColor(theme),
+                      title: languages[appLanguage]!["password_again"]!,
+                      hintText: languages[appLanguage]!["input_password_again"]!,
+                      controller: authNotifier.passwordAgainController,
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () => authNotifier.switchRegister(),
+                          child: Text(authState.isRegister ?
+                          languages[appLanguage]!["already_have_account"]!
+                              : languages[appLanguage]!["no_account"]!, style: kCustomTextStyle.copyWith(
+                              color: kDarkBackground, fontSize: 13.w
+                          ),),
+                        ),
+                        if(!authState.isRegister) Text(languages[appLanguage]!["forgot_password"]!,
+                          style: kCustomTextStyle.copyWith(
+                              color: kDarkBackground, fontSize: 13.w
+                          ),),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
 
-            customButton(title: authState.isRegister ?
-            languages[appLanguage]!["sign_up"]! :
-            languages[appLanguage]!["login"]!, color: buttonColor(theme), onPressed: () async {
 
-              authNotifier.handleSignInWithEmail(authNotifier, context: context);
-            },),
+            CustomSquaredButton(
+              width: width,
+              height: 45.h,
+              borderRadius: 25,
+              enableBorder: true,
+              borderColor: grayTextColor(theme).withOpacity(.2),
+              title: authState.isRegister ? languages[appLanguage]!["sign_up"]! : languages[appLanguage]!["login"]!,
+              color: kPrimaryOrange,
+              textStyle: kTitleTextStyle.copyWith(color: Colors.white, fontSize: 16.w),
+              onPressed: () async {
 
+                authNotifier.handleSignInWithEmail(authNotifier, context: context);
+              },
+            ),
+            /*
             Text(languages[appLanguage]!["or"]!,
-              style: kCustomTextStyle.copyWith(color: textColor(theme)),),
+              style: kCustomTextStyle.copyWith(color: textColor(theme), fontSize: 13.w),),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -141,7 +161,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     padding: const EdgeInsets.all(10),
-                    backgroundColor: cardColor(theme),
+                    backgroundColor: backGroundColor(theme),
                     foregroundColor: kWhite,
                   ),
                   child: Image.asset("assets/icons/google.png", width: 20.w,),
@@ -154,14 +174,16 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     padding: const EdgeInsets.all(10),
-                    backgroundColor: cardColor(theme), // <-- Button color
-                    foregroundColor: kWhite, // <-- Splash color
+                    backgroundColor: backGroundColor(theme),
+                    foregroundColor: kWhite,
                   ),
                   child: Image.asset("assets/icons/apple.png",
                     color: textColor(theme), width: 20.w,),
                 )
               ],
             ),
+
+
             SizedBox(height: 20.h,),
             Wrap(
 
@@ -185,7 +207,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               onPressed: () async {
                 authNotifier.handleSignInAnonymous(authNotifier, context: context);
               },
-            ),
+            ),*/
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,22 +73,23 @@ class BottomCardWidget extends ConsumerWidget {
               spacing: 10,
               children: [
                 if(addButton) CustomSquaredButton(
-                 // enableBorder: true,
+                  enableBorder: true,
                   borderRadius: 7,
-                  width: 70.w,
+                  width: 120.w,
                   height: 35.w,
-                  color: kPrimaryOrange,
-                  //borderColor: reverseTextColor(theme),
+                  color: cardColor2(!theme),
+                  borderColor: reverseTextColor(theme),
                   textStyle: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 14.w),
+                  iconData: CupertinoIcons.map_pin_ellipse,
                   iconSize: 20.w,
-                  title: languages[language]!["add_product"]!,
+                  title: "900 m",
                   onPressed: () {
-                    if(onPressed != null) {
-                      onPressed!();
+                    if(FirebaseAuth.instance.currentUser != null) {
+                      context.push("/card");
                     }
                   },
                 ),
-                CustomSquaredButton(
+                if(!addButton) CustomSquaredButton(
                   enableBorder: true,
                   borderRadius: 7,
                   width: 70.w,
@@ -99,7 +101,9 @@ class BottomCardWidget extends ConsumerWidget {
                   iconSize: 20.w,
                   title: orderState.cart.length.toString(),
                   onPressed: () {
-                    context.push("/card");
+                    if(FirebaseAuth.instance.currentUser != null) {
+                      context.push("/card");
+                    }
                   },
                 ),
               ],

@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iycoffee/models/cart_item_model.dart';
 
 import '../../constants/app_constants.dart';
+import '../../controllers/order_controller.dart';
 import '../../controllers/product_controller.dart';
 
 class CartWidget extends ConsumerWidget {
@@ -15,16 +17,22 @@ class CartWidget extends ConsumerWidget {
   final int piece;
   final bool isFav;
   final List userFavorites;
+  final CartItemModel model;
+
   const CartWidget({super.key, required this.title, required this.image, 
-  required this.userFavorites,
-  required this.productUid,
-  required this.isFav,
-  required this.piece});
+    required this.userFavorites,
+    required this.productUid,
+    required this.isFav,
+    required this.piece,
+    required this.model
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final width = MediaQuery.of(context).size.width;
     final productController = ref.watch(drinksController.notifier);
+
+    final orderNotifier = ref.watch(orderController.notifier);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
@@ -75,13 +83,18 @@ class CartWidget extends ConsumerWidget {
                         icon: Icon(CupertinoIcons.minus_circle, 
                         color: kOrangeDark, size: 30.w,),
                         splashRadius: 20,
-                        onPressed: () {},
+                        onPressed: () {
+                          orderNotifier.changePiece(model, isIncrement: false);
+
+                        },
                       ),
                       Text(piece.toString(), style: kTitleTextStyle.copyWith(fontSize: 13.w),),
                       IconButton(
                         icon: Icon(CupertinoIcons.add_circled_solid, color: kGreen, size: 30.w,),
                         splashRadius: 20,
-                        onPressed: () {},
+                        onPressed: () {
+                          orderNotifier.changePiece(model, isIncrement: true);
+                        },
                       ),
                     ],
                   ),

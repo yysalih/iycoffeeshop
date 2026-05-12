@@ -22,7 +22,7 @@ Widget customInputField({
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       if(hasTitle) ...[
-        Text(title, style: kTitleTextStyle.copyWith(color: textColor(theme),),),
+        Text(title, style: kTitleTextStyle.copyWith(color: textColor(theme), fontSize: 13.w),),
         SizedBox(height: 3.h,),
       ],
       ClipRRect(
