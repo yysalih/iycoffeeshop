@@ -17,6 +17,7 @@ import 'package:iycoffee/views/menu_views/menu_view.dart';
 import 'package:iycoffee/views/drink_views/drink_view.dart';
 import 'package:iycoffee/views/drink_views/drinks_view.dart';
 import 'package:iycoffee/views/main_view.dart';
+import 'package:iycoffee/views/payment_views/payment_successful_view.dart';
 import 'package:iycoffee/views/payment_views/wallet_view.dart';
 import 'package:iycoffee/views/profile_views/profile_view.dart';
 import 'package:iycoffee/views/shop_views/shop_view.dart';
@@ -155,6 +156,11 @@ class _MyAppState extends ConsumerState<MyApp> {
           GoRoute(
             path: "/card",
             builder: (context, state) => const CartView(),
+          ),
+
+          GoRoute(
+            path: "/paymentSuccessful",
+            builder: (context, state) => const PaymentSuccessfulView(),
           ),
         ],
       ),

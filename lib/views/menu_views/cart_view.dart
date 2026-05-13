@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iycoffee/repos/cake_repository.dart';
+import 'package:iycoffee/widgets/app_widgets/app_status_widget.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/languages.dart';
 import '../../constants/providers.dart';
@@ -35,6 +36,7 @@ class CartView extends ConsumerWidget {
     final userProvider = ref.watch(userStreamProvider(FirebaseAuth.instance.currentUser!.uid));
     
 
+    final total = orderState.cart.fold(0.0, (previousValue, element) => previousValue + (element.totalPrice!));
 
     return userProvider.when(
       data: (user) => Stack(
@@ -118,19 +120,47 @@ class CartView extends ConsumerWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                        child: CustomSquaredButton(
-                          // enableBorder: true,
-                          borderRadius: 20,
-                          width: width,
-                          height: 40.w,
-                          color: kPrimaryOrange,
-                          //borderColor: reverseTextColor(theme),
-                          textStyle: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 15.w),
-                          iconSize: 20.w,
-                          title: languages[language]!["complete_order"]!,
-                          onPressed: () {
-
-                          },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("$total ₺", style: kTitleTextStyle.copyWith(
+                              fontSize: 15.w, color: textColor(theme)),),
+                            CustomSquaredButton(
+                              // enableBorder: true,
+                              borderRadius: 20,
+                              width: width * .7,
+                              height: 40.w,
+                              color: kPrimaryOrange,
+                              //borderColor: reverseTextColor(theme),
+                              textStyle: kTitleTextStyle.copyWith(color: reverseTextColor(theme), fontSize: 15.w),
+                              iconSize: 20.w,
+                              title: languages[language]!["complete_order"]!,
+                              onPressed: () {
+                                debugPrint("Total: $total");
+                            
+                                if(user.wallet! < total) {
+                            
+                                  showDialog(context: context, builder: (context) => CustomAlertDialog(
+                                    title: languages[language]!["insufficient_balance"]!,
+                                    description: languages[language]!["add_funds_to_wallet"]!,
+                                    image: "rabbit2",
+                                    iconColor: kPrimaryOrange,
+                                    onPressed: () {
+                                      context.pop();
+                                      context.push("/wallet");
+                                    },
+                                  ));
+                            
+                                }
+                                else {
+                                  orderNotifier.createOrder(
+                                    context: context,
+                                    errorTitle: languages[language]!["order_creation_failed"]!,
+                                  );
+                                }
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ],

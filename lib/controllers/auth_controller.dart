@@ -129,7 +129,9 @@ class AuthController extends StateNotifier<AuthState> {
         phone: phoneController.text,
         lastname: surnameController.text,
         token: "token",
-      favorites: []
+        favorites: [],
+        orders: [],
+        wallet: 0.001
     );
 
     await FirebaseFirestore.instance.collection("users").doc(userModel.uid)

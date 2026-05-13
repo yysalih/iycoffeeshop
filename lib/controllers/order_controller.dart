@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iycoffee/constants/app_constants.dart';
 import 'package:iycoffee/models/cart_item_model.dart';
 import 'package:iycoffee/models/order_model.dart';
 import 'package:iycoffee/models/product_model.dart';
 import 'package:iycoffee/views/payment_views/payment_successful_view.dart';
+import 'package:iycoffee/widgets/app_widgets/app_status_widget.dart';
 import 'package:uuid/uuid.dart';
 
 import '../constants/providers.dart';
@@ -26,30 +29,43 @@ class OrderState {
 class OrderController extends StateNotifier<OrderState> {
   OrderController(super.state);
 
-  createOrder({required BuildContext context, required String errorTitle, required String successTitle}) async {
+  createOrder({required BuildContext context, required String errorTitle}) async {
 
-    String? token = await FirebaseMessaging.instance.getToken();
+    showDialog(context: context, builder: (context) => const CreatingOrderDialog());
 
     String uid = const Uuid().v4();
+
     OrderModel orderModel = OrderModel(
       uid: uid,
       products: state.cart.map((e) => e.toJson(),).toList(),
       status: "sent",
-      who: currentUserUid,
+      customerUid: currentUserUid,
+      createdAt: DateTime.now(),
+      orderNumber: generateOrderNumber(),
+      note: "",
       totalPrice: state.cart.where((element) => element.totalPrice != null).toList()
           .fold(0.0, (previousValue, element) => previousValue! + element.totalPrice!)
     );
 
     await firebaseFirestore.collection("orders").doc(orderModel.uid)
         .set(orderModel.toJson())
-        .whenComplete(() {
+        .whenComplete(() async {
       debugPrint("order created");
-      Navigator.push(context, routeToView(const PaymentSuccessfulView()));
-      showSnackbar(title: successTitle, context: context);
-    })
-        .onError((error, stackTrace) {
+
+      await firebaseFirestore.collection("users").doc(currentUserUid).update({
+        "orders": FieldValue.arrayUnion([orderModel.uid]),
+        "wallet": FieldValue.increment(-orderModel.totalPrice!)
+      });
+
+      clearBasket();
+
+      context.pop();
+      context.go("/paymentSuccessful");
+
+    }).onError((error, stackTrace) {
       debugPrint("Error in create method: $error");
       debugPrint('Error: $stackTrace');
+      context.pop();
 
       showSnackbar(title: errorTitle, context: context);
     });
@@ -103,6 +119,12 @@ class OrderController extends StateNotifier<OrderState> {
     }
 
     debugPrint("Current Cart Pieces: ${state.cart.map((e) => e.toJson())}");
+  }
+
+  String generateOrderNumber() {
+    final now = DateTime.now();
+    // Format: 260513 (Date) + last 4 digits of timestamp
+    return "${now.year.toString().substring(2)}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}-${now.millisecondsSinceEpoch.toString().substring(9)}*$currentUserUid";
   }
 
   clearBasket() => state = state.copyWith(cart: []);

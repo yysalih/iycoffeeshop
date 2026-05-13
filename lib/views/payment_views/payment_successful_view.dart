@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iycoffee/constants/app_constants.dart';
 import 'package:iycoffee/constants/languages.dart';
 import 'package:iycoffee/main.dart';
 import 'package:iycoffee/views/main_view.dart';
+import 'package:iycoffee/widgets/app_widgets/app_bar_widget.dart';
 
 import '../../constants/providers.dart';
 
@@ -22,16 +25,20 @@ class PaymentSuccessfulView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: backGroundColor(theme),
-      body: SafeArea(
-        child: Center(
-          child: PaymentSuccessfulWidget(
-            icon: "done",
-            theme: theme,
-            color: Colors.green,
-            text: languages[language]!["success_creating_order"]!,
-            language: language,
+      body: Stack(
+        children: [
+          const AppBarWidget(title: "your_order"),
+          Positioned(
+            bottom: 0,
+            child: PaymentSuccessfulWidget(
+              icon: "done",
+              theme: theme,
+              color: Colors.green,
+              text: languages[language]!["success_creating_order"]!,
+              language: language,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -50,27 +57,55 @@ class PaymentSuccessfulWidget extends StatelessWidget {
     required this.theme,
     required this.language});
 
-  @override
+    @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset("assets/images/logo.png", width: 350.w, color: textColor(theme),),
-        SizedBox(height: 40.h,),
-        Image.asset("assets/icons/$icon.png", width: 200.w, color: color,),
-        SizedBox(height: 40.h,),
-        Text(text, style: kCustomTextStyle.copyWith(
-          color: textColor(theme),
-        ),),
-        SizedBox(height: 20.h,),
-        TextButton(
-          child: Text(languages[language]!["go_home"]!, style: kCustomTextStyle.copyWith(
-            color: backGroundColor(!theme), fontWeight: FontWeight.bold
-          ),),
-          onPressed: () => Navigator.push(context, routeToView(const MainView())),
-        ),
-      ],
+    
+    final primaryTextColor = textColor(theme);
+    final buttonTextColor = backGroundColor(!theme);
+
+    return Container(
+      width: double.infinity, 
+      height: 0.82.sh,        
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 24.w), 
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // The Illustration
+          Image.asset(
+            "assets/icons/rabbit2.png",
+            width: 150.w,
+            color: kPrimaryBrown,
+          ),
+          
+          40.verticalSpace, 
+
+          Text(
+            text,
+            textAlign: TextAlign.center, 
+            style: kCustomTextStyle.copyWith(
+              color: primaryTextColor,
+              fontSize: 16.sp, 
+            ),
+          ),
+
+          20.verticalSpace,
+
+          FilledButton.tonal( 
+            onPressed: () => context.push("/menu"),
+            style: FilledButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
+            ),
+            child: Text(
+              languages[language]!["go_home"]!,
+              style: kCustomTextStyle.copyWith(
+                color: buttonTextColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

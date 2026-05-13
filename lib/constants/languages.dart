@@ -90,12 +90,16 @@ const Map<String, String> tr = {
   "add_product" : "Sepete Ekle",
   "my_cart" : "Sepetim",
   "confirm" : "Onayla",
+  "insufficient_balance" : "Bakiyen henüz yeterli değil",
+  "add_funds_to_wallet" : "Devam etmek için cüzdanına küçük bir takviye yapabilirsin",
+  "order_creation_failed" : "Sipariş oluşturulurken bir hata oluştu",
+  "your_order" : "Siparişin",
+  "success_creating_order" : "Siparişiniz alındı. Siparişlerim bölümünden sipariş durumunu takip edebilirsiniz.",
 
 
   "want_to_sign_up" : "Hesap oluşturmak ister misin?",
   "go_home" : "Ana Menüye Git",
   "success_adding_in_basket" : "Ürün sepete eklendi",
-  "success_creating_order" : "Sipariş verildi.",
   "error_creating_order" : "Sipariş verilirken bir hata oluştu.",
   "no_product_found" : "Ürün bulunamadı",
   "switch_theme" : "Tema Değiştir",
